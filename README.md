@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #Express Brunch with Jade
 
 Express Brunch with Jade is a [Brunch](http://brunch.io/) app skeleton that has everything [hipsters](https://github.com/elving/brunch-with-hipsters) has, but adds a custom Express Server, public & server file watcher, built-in socket.io reload, custom Backbone model/view/collection helpers, Jade client & server side templates and over 70 mocha BDD tests.
@@ -130,4 +129,4 @@ HomeAgainApi
 ============
 
 REST Api for home again application.
->>>>>>> c269327cd23499d473fb75c78c1d0ecaf73bae85
+
