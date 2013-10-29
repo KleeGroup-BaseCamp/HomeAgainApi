@@ -2,14 +2,13 @@ express = require 'express'
 {join} = require 'path'
 {config} = require './config'
 routes = require './routes'
+collector = require './routes/collector'
 
 # Init mongo connection only once
 mongo = require './mongo'
-mongo.init( (error) ->
+mongo.init (error) ->
     if error
         throw error
-)
-
 
 app = express()
 
@@ -26,7 +25,7 @@ app.configure ->
     app.use express.compress()
     app.use express.cookieParser(config.cookie.secret)
     app.use express.session()
-    app.use express.csrf()
+    #app.use express.csrf()
     app.use app.router
     app.use express.static join __dirname, '..', 'public'
 
@@ -35,6 +34,7 @@ app.configure 'development', ->
     app.locals.pretty = true
 
 app.get '/', routes.index('Express', express.version)
+app.post '/collector/collect', collector.collect
 app.get '/test', routes.test('Mocha Tests')
 
 ### Default 404 middleware ###
