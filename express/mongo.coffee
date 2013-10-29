@@ -16,5 +16,8 @@ module.exports.init = (callback) ->
                         module.exports.dataCollection = new mongodb.Collection(
                             db, 'data'
                         )
+                        module.exports.sensorCollection = new mongodb.Collection(
+                            db, 'sensor'
+                        )
                 )
         )
