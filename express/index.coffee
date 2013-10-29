@@ -3,6 +3,14 @@ express = require 'express'
 {config} = require './config'
 routes = require './routes'
 
+# Init mongo connection only once
+mongo = require './mongo'
+mongo.init( (error) ->
+    if error
+        throw error
+)
+
+
 app = express()
 
 app.configure 'production', ->
