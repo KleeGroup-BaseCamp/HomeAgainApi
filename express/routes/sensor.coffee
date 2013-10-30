@@ -1,11 +1,13 @@
 mongo = require '../mongo'
 async = require 'async'
+
 exports.lastData = (req, res) ->
 #    if req.get('content-type').indexOf('application/json') == -1
 #        throw new Error("Body request is not JSON.")
 
     mongo.dataCollection.findOne(
         {'sensor_id' : req.params.sensor_id},
+        {timestamp: 1},
         (err, object) ->
             if err 
                 res.send 500
@@ -31,16 +33,15 @@ exports.all = (req, res) ->
                     (sensor, callback) ->
                         console.log("Fetching last data")
                         console.log(sensor)
-                        mongo.dataCollection.findOne(
-                            {'sensor_id' : sensor.sensor_id},
+                        mongo.dataCollection.find({'sensor_id' : sensor.sensor_id}).sort({'timestamp': -1}).toArray(
                             (err, data) ->
                                 if err 
                                     res.send 500
                                 else
-                                    sensor.lastData = data
+                                    sensor.lastData = data[0]
                                     console.log sensor
                                     callback null, sensor
-                            )
+                        )
                     (err, result) ->
                         if(err) 
                             res.send 500
@@ -57,13 +58,12 @@ exports.get = (req, res) ->
             if err 
                 res.send 500
             else
-                mongo.dataCollection.findOne(
-                    {'sensor_id' : req.params.sensor_id},
+                mongo.dataCollection.find({'sensor_id' : sensor.sensor_id}).sort({timestamp: -1}).toArray(
                     (err, data) ->
                         if err 
                             res.send 500
                         else
-                            sensor.lastData = data
+                            sensor.lastData = data[0]
                             res.send(JSON.stringify(sensor), 200)
                     )
         )
