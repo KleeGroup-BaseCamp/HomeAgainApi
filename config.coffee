@@ -52,7 +52,7 @@ exports.config =
             joinTo: 'javascripts/app.js'
     server:
         path: 'server.coffee'
-        port: 3333
+        port: 4000
         base: '/'
         app: 'express'
         debug: 'brunch:server'
