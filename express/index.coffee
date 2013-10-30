@@ -4,6 +4,7 @@ express = require 'express'
 routes = require './routes'
 collector = require './routes/collector'
 sensor = require './routes/sensor'
+room = require './routes/room'
 
 # Init mongo connection only once
 mongo = require './mongo'
@@ -16,6 +17,9 @@ app = express()
 app.use '/', (req, res, next) -> 
     res.header("Access-Control-Allow-Origin", "*")
     res.header("Access-Control-Allow-Headers", "X-Requested-With")
+
+    # TODO Non automatic content type
+    res.header("Content-Type", "application/json")
     next()
 
 app.configure 'production', ->
@@ -43,11 +47,16 @@ app.configure 'development', ->
 
 app.get '/', routes.index('Express', express.version)
 app.post '/collector/collect', collector.collect
-app.get '/sensor/:sensor_id/data', sensor.lastData
 app.get '/sensor/:sensor_id', sensor.get
 app.get '/sensor', sensor.all
 
+
+app.get '/room/:room_id', room.get
+app.get '/room', room.all
+
+
 app.get '/test', routes.test('Mocha Tests')
+
 
 ### Default 404 middleware ###
 app.use routes.error('Page not found :(', 404)

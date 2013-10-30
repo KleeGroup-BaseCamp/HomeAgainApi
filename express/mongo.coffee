@@ -19,5 +19,8 @@ module.exports.init = (callback) ->
                         module.exports.sensorCollection = new mongodb.Collection(
                             db, 'sensor'
                         )
+                        module.exports.roomCollection = new mongodb.Collection(
+                            db, 'room'
+                        )
                 )
         )
