@@ -15,7 +15,7 @@ exports.collect = (req, res) ->
             else if  count < 1
                 console.log "Should add sensor"
                 mongo.sensorCollection.insert(
-                    {sensor_id : jsonData.sensor_id}, {w:1}, (err, collection) ->
+                    {sensor_id : jsonData.sensor_id, model : jsonData.model }, {w:1}, (err, collection) ->
                         console.log "Request terminated"
                         console.log(err)
                 )

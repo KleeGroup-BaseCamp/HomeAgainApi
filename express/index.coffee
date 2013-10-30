@@ -3,6 +3,7 @@ express = require 'express'
 {config} = require './config'
 routes = require './routes'
 collector = require './routes/collector'
+sensor = require './routes/sensor'
 
 # Init mongo connection only once
 mongo = require './mongo'
@@ -38,8 +39,14 @@ app.configure 'development', ->
     app.use express.errorHandler()
     app.locals.pretty = true
 
+
+
 app.get '/', routes.index('Express', express.version)
 app.post '/collector/collect', collector.collect
+app.get '/sensor/:sensor_id/data', sensor.lastData
+app.get '/sensor/:sensor_id', sensor.get
+app.get '/sensor', sensor.all
+
 app.get '/test', routes.test('Mocha Tests')
 
 ### Default 404 middleware ###
