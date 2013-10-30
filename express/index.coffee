@@ -11,6 +11,11 @@ mongo.init (error) ->
         throw error
 
 app = express()
+# Allow Cross Origin
+app.use '/', (req, res, next) -> 
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "X-Requested-With")
+    next()
 
 app.configure 'production', ->
     app.use express.limit '5mb'
