@@ -3,29 +3,31 @@ async = require('async');
 BSON = require('mongodb').BSONPure;
 
 exports.all = function(req, res){
+    mongo.init();
     mongo.roomCollection.find().toArray(
         function(err, rooms){
             if(err) res.send(500);
             console.log(rooms);
+            //res.send(JSON.stringify(rooms), 200);
             async.map(rooms,
                 function(room, callback){
-                    console.log("Looking for room_id : " + room_id);
-                    // NOT WORKING.....
+                    console.log("Looking for sensors with room_id : " + room._id);
                     mongo.sensorCollection.find({room_id : room._id.toString()}).toArray(
                         function(err, sensors){
+                            console.log("Query terminated");
                             console.log(sensors);
-
-                            if(err) callback(err);
                             room.sensors = sensors;
                             callback(null, room);
                         }
                     );
+
                 },
                 function (err, rooms){
                     if(err) res.send(500);
+
                     res.send(JSON.stringify(rooms), 200);
                 }
-                );
+            );
 
         }
     );
@@ -37,9 +39,17 @@ exports.get = function(req, res){
         {_id : BSON.ObjectID(req.params.room_id)},
         function(err, room){
             if(err) res.send(500);
+            console.log("Query terminated");
 
-
-            res.send(JSON.stringify(room), 200);
+            mongo.sensorCollection.find({room_id : room._id.toString()}).toArray(
+                function(err, sensors){
+                    console.log("Query terminated");
+                    console.log(sensors);
+                    room.sensors = sensors;
+                    res.send(JSON.stringify(room), 200);
+                }
+            );
+            
         }
     );
 };
