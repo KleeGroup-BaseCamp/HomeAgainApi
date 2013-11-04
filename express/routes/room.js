@@ -14,10 +14,27 @@ exports.all = function(req, res){
                     console.log("Looking for sensors with room_id : " + room._id);
                     mongo.sensorCollection.find({room_id : room._id.toString()}).toArray(
                         function(err, sensors){
-                            console.log("Query terminated");
-                            console.log(sensors);
-                            room.sensors = sensors;
-                            callback(null, room);
+                            async.map(
+                                sensors,
+                                function(sensor, callback){
+                                    mongo.dataCollection.find({}).sort({timestamp : -1}).toArray(
+                                        function(err, data){
+                                            if(err) res.send(500);
+                                            else{
+                                                sensor.lastData = data[0];
+                                                callback(null, sensor);
+                                            }
+                                        }
+                                    );
+                                },
+                                function(err, sensors){
+                                    console.log("Query terminated");
+                                    console.log(sensors);
+                                    room.sensors = sensors;
+                                    callback(null, room);
+                                }
+                            );
+                            
                         }
                     );
 
