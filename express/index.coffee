@@ -2,6 +2,7 @@ express = require 'express'
 {join} = require 'path'
 {config} = require './config'
 routes = require './routes'
+backbone = require './routes/index'
 collector = require './routes/collector'
 sensor = require './routes/sensor'
 room = require './routes/room'
@@ -44,10 +45,11 @@ app.configure 'development', ->
 
 
 
-app.get '/', routes.index('Express', express.version)
+app.all('/admin/?', backbone.index)
 app.post '/collector/collect', collector.collect
 app.get '/sensor/:sensor_id', sensor.get
 app.get '/sensor', sensor.all
+app.put('/sensor/:sensor_id', sensor.put)
 
 
 app.get '/room/:room_id', room.get

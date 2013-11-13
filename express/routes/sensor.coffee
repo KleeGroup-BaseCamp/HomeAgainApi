@@ -70,3 +70,15 @@ exports.get = (req, res) ->
         )
     
 
+exports.put = (req, res) ->
+    console.log(req.body)
+    mongo.sensorCollection.update(
+            {'sensor_id' : req.params.sensor_id},
+            req.body,
+            {upsert: true},
+            (err, sensor) ->
+                if err
+                    res.send 500
+                else
+                    res.send(JSON.stringify(sensor), 200)
+        )
