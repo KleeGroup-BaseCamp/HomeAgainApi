@@ -14,12 +14,11 @@ mongo.init (error) ->
 
 app = express()
 # Allow Cross Origin
-app.use '/', (req, res, next) -> 
+app.use '/', (req, res, next) ->
     res.header("Access-Control-Allow-Origin", "*")
     res.header("Access-Control-Allow-Headers", "X-Requested-With")
 
     # TODO Non automatic content type
-    res.header("Content-Type", "application/json")
     next()
 
 app.configure 'production', ->
