@@ -7,8 +7,7 @@ exports.all = function(req, res){
     mongo.roomCollection.find().toArray(
         function(err, rooms){
             if(err) res.send(500);
-            console.log(rooms);
-            //res.send(JSON.stringify(rooms), 200);
+            
             async.map(rooms,
                 function(room, callback){
                     console.log("Looking for sensors with room_id : " + room._id);
@@ -21,15 +20,13 @@ exports.all = function(req, res){
                                         function(err, data){
                                             if(err) res.send(500);
                                             else{
-                                                sensor.lastData = data[0];
+                                                sensor.data = data[0];
                                                 callback(null, sensor);
                                             }
                                         }
                                     );
                                 },
                                 function(err, sensors){
-                                    console.log("Query terminated");
-                                    console.log(sensors);
                                     room.sensors = sensors;
                                     callback(null, room);
                                 }
