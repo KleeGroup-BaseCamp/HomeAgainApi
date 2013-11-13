@@ -11,8 +11,10 @@ exports.lastData = (req, res) ->
         (err, object) ->
             if err 
                 res.send 500
-            else
+            else if object
                 res.send(JSON.stringify(object), 200)
+            else 
+                res.send 404
         )
     
 exports.all = (req, res) ->
@@ -20,7 +22,7 @@ exports.all = (req, res) ->
     mongo.sensorCollection.find().toArray((err, sensors) ->
             if err 
                 res.send 500
-            else
+            else if sensors
                 
                 # Ready to map the data
                 async.map(
@@ -42,6 +44,8 @@ exports.all = (req, res) ->
                             res.send 500
                         res.send(JSON.stringify(result), 200)
                 )
+            else 
+                res.send 404
         )
 
 exports.get = (req, res) ->
@@ -50,7 +54,8 @@ exports.get = (req, res) ->
         (err, sensor) ->
             if err 
                 res.send 500
-            else
+            else if sensor
+                console.log(sensor)
                 # Add the last data to the sensor
                 mongo.dataCollection.find({'sensor_id' : sensor.sensor_id}).sort({timestamp: -1}).toArray(
                     (err, data) ->
@@ -60,6 +65,8 @@ exports.get = (req, res) ->
                             sensor.data = data[0]
                             res.send(JSON.stringify(sensor), 200)
                     )
+            else 
+                res.send 404
         )
     
 
