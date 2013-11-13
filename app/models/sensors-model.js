@@ -4,4 +4,9 @@ module.exports = SensorModel = Backbone.Model.extend({
     defaults : {
         name: 'MySensor',
     },
+    schema: {
+        name: 'Text',
+        sensor_id: 'Text',
+        model: { type: 'Select', options: ['temperature', 'door'] },
+    }
 });

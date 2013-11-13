@@ -45,7 +45,7 @@ app.configure 'development', ->
 
 
 
-app.all('/admin/?', backbone.index)
+app.all(/^\/admin.*$/, backbone.index)
 app.post '/collector/collect', collector.collect
 app.get '/sensor/:sensor_id', sensor.get
 app.get '/sensor', sensor.all
