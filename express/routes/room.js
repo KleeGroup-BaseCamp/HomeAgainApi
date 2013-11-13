@@ -17,7 +17,7 @@ exports.all = function(req, res){
                             async.map(
                                 sensors,
                                 function(sensor, callback){
-                                    mongo.dataCollection.find({}).sort({timestamp : -1}).toArray(
+                                    mongo.dataCollection.find({sensor_id : sensor.sensor_id}).sort({timestamp : -1}).toArray(
                                         function(err, data){
                                             if(err) res.send(500);
                                             else{
