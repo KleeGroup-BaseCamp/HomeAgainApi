@@ -1,14 +1,22 @@
-SensorCollection = require('models/sensors-collection')
 SensorModel = require('models/sensors-model')
-AddSensorView = require('views/add_sensor_view')
+RoomModel = require('models/room-model')
+SensorCollection = require('models/sensors-collection')
+
+RoomCollection = require('models/room-collection')
+
 SensorsView = require('views/sensors_view')
 SensorView = require('views/sensor_view')
-SensorEdit = require('views/sensor_edit')
+SensorEditView= require('views/sensor_edit')
+
+RoomsView = require('views/rooms_view')
+RoomAddView = require('views/room_add')
 
 module.exports = AppRouter = Backbone.Router.extend(
     routes:
         'admin/sensors/': 'sensors'
         'admin/sensors/edit/:sensor_id': 'editSensor'
+        'admin/rooms/': 'rooms'
+        'admin/rooms/add/': 'addRoom'
         'admin(/)': 'admin'
         "*path"  : "notFound"
 
@@ -27,7 +35,7 @@ module.exports = AppRouter = Backbone.Router.extend(
         sensor.set({'sensor_id', sensor_id})
         sensor.fetch(
             success: ->
-                sensorEdit = new SensorEdit()
+                sensorEdit = new SensorEditView()
                 sensorEdit.model = sensor
                 sensorEdit.render()
                 $("#AppView").html(sensorEdit.$el)
@@ -44,6 +52,36 @@ module.exports = AppRouter = Backbone.Router.extend(
                             Backbone.history.navigate('/admin/sensors/', true)
                     )
                 )
+        )
+
+    rooms: ->
+        rooms = new RoomCollection()
+        rooms.fetch(
+            success: ->
+                roomsView = new RoomsView({collection: rooms})
+                roomsView.render()
+        )
+
+    addRoom: ->
+        room = new RoomModel()
+        form = new Backbone.Form({
+            model: room
+            })
+        roomAddView = new RoomAddView()
+        roomAddView.model = room
+        roomAddView.render()
+        $("#AppView").html(roomAddView.$el)
+        $("#form").html(form.render().$el)
+        $("#add").click( (object) ->
+            form.commit()
+            room.save(
+                null,
+                success: (model, response) ->
+                    console.log('Room added successfully')
+                    Backbone.history.navigate('/admin/rooms/', true)
+                error: (model, response) ->
+                    console.log(response)
+            )
         )
 
     notFound: ->

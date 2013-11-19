@@ -53,6 +53,7 @@ app.put('/sensor/:sensor_id', sensor.put)
 
 
 app.get '/room/:room_id', room.get
+app.post '/room/', room.post
 app.get '/room', room.all
 
 

@@ -67,3 +67,14 @@ exports.get = function(req, res){
         }
     );
 };
+
+exports.post = function(req, res){
+    mongo.roomCollection.insert(
+        req.body,
+        function(err, room){
+            if(err) res.send(500);
+            res.send(JSON.stringify(room), 200);
+            
+        }
+    );
+};
