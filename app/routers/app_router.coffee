@@ -40,7 +40,7 @@ module.exports = AppRouter = Backbone.Router.extend(
                     sensor.save(
                         null,
                         success: ->
-                            console.log('successfully updated! ')
+                            console.log('Sensor successfully updated! ')
                             Backbone.history.navigate('/admin/sensors/', true)
                     )
                 )
