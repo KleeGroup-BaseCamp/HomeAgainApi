@@ -11,7 +11,7 @@ module.exports = SensorModel = Backbone.Model.extend({
         sensor_id: { editorAttrs: { disabled: true } },
         model: { type: 'Select', options: ['temperature', 'door'],  editorAttrs: { disabled: true }},
         room: {type: 'Select', options: function(){
-            var options = [];
+            var options = [{val: 0, label:"Unassigned"}];
             $.getJSON(
                 'http://localhost:4000/room/',
                 function(rooms){
