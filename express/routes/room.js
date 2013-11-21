@@ -13,25 +13,8 @@ exports.all = function(req, res){
                     console.log("Looking for sensors with room_id : " + room._id);
                     mongo.sensorCollection.find({room_id : room._id.toString()}).toArray(
                         function(err, sensors){
-                            async.map(
-                                sensors,
-                                function(sensor, callback){
-                                    mongo.dataCollection.find({sensor_id : sensor.sensor_id}).sort({timestamp : -1}).toArray(
-                                        function(err, data){
-                                            if(err) res.send(500);
-                                            else{
-                                                sensor.data = data[0];
-                                                callback(null, sensor);
-                                            }
-                                        }
-                                    );
-                                },
-                                function(err, sensors){
-                                    room.sensors = sensors;
-                                    callback(null, room);
-                                }
-                            );
-                            
+                            room.sensors = sensors;
+                            callback(null, room);
                         }
                     );
 
