@@ -10,12 +10,19 @@ block content
   .container
     .navbar.navbar-inverse
       .navbar-inner
-        .brand HomeAgain
-        .nav-collapse.collapse
-          ul.nav
+        .navbar-brand HomeAgain
+        .navbar-collapse.collapse
+          ul.nav.navbar-nav
             li: a(href="/admin", target="_blank") Admin
           #LoginView
-    #AppView
+  
+    .col-md-3
+      .list-group#menu
+        a#menu-sensors.list-group-item(href ="/admin/sensors/") Sensors
+        a#menu-rooms.list-group-item(href="/admin/rooms/") Rooms
+      a.btn.btn-success(href="/admin/rooms/add/") Add room
+    .col-md-9    
+      #AppView
     hr
     footer
       p © HomeAgain 2013

@@ -7,7 +7,6 @@ RoomCollection = require('models/room-collection')
 SensorsView = require('views/sensors_view')
 SensorView = require('views/sensor_view')
 SensorEditView= require('views/sensor_edit')
-
 RoomsView = require('views/rooms_view')
 RoomAddView = require('views/room_add')
 

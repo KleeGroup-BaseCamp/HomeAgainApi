@@ -1,5 +1,10 @@
-.col-md-3
-    .well.text-center
-        a(href="/admin/sensors/edit/#{sensor_id}")
-            h2 #{name}
-            h2 #{sensor_id}
+.col-sm-6.col-md-6.col-lg-6
+    .panel.panel-primary
+        .panel-heading.text-center #{name}
+        .panel-body
+            .row
+                .col-sm-6.col-md-6.col-lg-6(style="border-right: 1px solid #aaa;")
+                    p Type : #{model}
+                    p ID : #{sensor_id}
+                .col-sm-6.col-md-6.col-lg-6
+                    a(href="/admin/sensors/edit/#{sensor_id}") Edit
