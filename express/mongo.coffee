@@ -11,6 +11,7 @@ module.exports.init = (callback) ->
                     if err
                         callback(err)
                     else
+                        #console.log result
                         # If authentication worked, export db instance
                         module.exports.db = db
                         module.exports.dataCollection = new mongodb.Collection(

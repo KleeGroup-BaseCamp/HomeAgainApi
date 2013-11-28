@@ -6,6 +6,8 @@ exports.config =
             indentation:
                 value: 4
                 level: "error"
+            max_line_length:
+                value: 180
     plugins:
         uglify:
             pattern: /\.js$/
@@ -69,6 +71,11 @@ exports.config =
                     indentation:
                         value: 4
                         level: "error"
+                    no_trailing_whitespace:
+                        level: "ignore" 
+                    max_line_length:
+                        value: 180
+
         tester:
             enabled: on
             mocha:
