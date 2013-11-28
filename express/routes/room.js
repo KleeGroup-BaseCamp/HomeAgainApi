@@ -10,7 +10,7 @@ exports.all = function(req, res){
             if(!rooms) res.send(404);
             async.map(rooms,
                 function(room, callback){
-                    console.log("Looking for sensors with room_id : " + room._id);
+                    #console.log("Looking for sensors with room_id : " + room._id);
                     mongo.sensorCollection.find({room_id : room._id.toString()}).toArray(
                         function(err, sensors){
                             room.sensors = sensors;
@@ -31,7 +31,7 @@ exports.all = function(req, res){
 };
 
 exports.get = function(req, res){
-    console.log(req.params.room_id);
+    #console.log(req.params.room_id);
     mongo.roomCollection.findOne(
         {_id : BSON.ObjectID(req.params.room_id)},
         function(err, room){
@@ -40,8 +40,8 @@ exports.get = function(req, res){
 
             mongo.sensorCollection.find({room_id : room._id.toString()}).toArray(
                 function(err, sensors){
-                    console.log("Query terminated");
-                    console.log(sensors);
+                    #console.log("Query terminated");
+                    #console.log(sensors);
                     room.sensors = sensors;
                     res.send(JSON.stringify(room), 200);
                 }

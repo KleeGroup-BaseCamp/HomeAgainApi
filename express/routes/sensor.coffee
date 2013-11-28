@@ -29,14 +29,14 @@ exports.all = (req, res) ->
                 sensors,
                 (sensor, callback) ->
                     # Fetching last data
-                    console.log(sensor)
+                    #console.log(sensor)
                     mongo.dataCollection.find({'sensor_id' : sensor.sensor_id}).sort({'timestamp': -1}).toArray(
                         (err, data) ->
                             if err 
                                 res.send 500
                             else
                                 sensor.data = data[0]
-                                console.log sensor
+                                #console.log sensor
                                 callback null, sensor
                     )
                 (err, result) ->
@@ -55,7 +55,7 @@ exports.get = (req, res) ->
             if err 
                 res.send 500
             else if sensor
-                console.log(sensor)
+                #console.log(sensor)
                 # Add the last data to the sensor
                 mongo.dataCollection.find({'sensor_id' : sensor.sensor_id}).sort({timestamp: -1}).toArray(
                     (err, data) ->
@@ -70,7 +70,7 @@ exports.get = (req, res) ->
         )
 
 exports.put = (req, res) ->
-    console.log(req.params.sensor_id)
+    #console.log(req.params.sensor_id)
     delete req.body["_id"]
     mongo.sensorCollection.update(
         {'sensor_id' : req.params.sensor_id},
@@ -78,7 +78,7 @@ exports.put = (req, res) ->
         {upsert: false},
         (err, sensor) ->
             if err
-                console.log(err)
+                #console.log(err)
                 res.send 500
             else
                 res.send(JSON.stringify(sensor), 200)

@@ -4,6 +4,7 @@ SensorCollection = require('models/sensors-collection')
 
 RoomCollection = require('models/room-collection')
 
+LoadingView = require('views/loading_view')
 SensorsView = require('views/sensors_view')
 SensorView = require('views/sensor_view')
 SensorEditView= require('views/sensor_edit')
@@ -19,9 +20,16 @@ module.exports = AppRouter = Backbone.Router.extend(
         'admin(/)': 'admin'
         "*path"  : "notFound"
 
+    loading: ->
+        loadingView = new LoadingView()
+        loadingView.render()
+        $("#AppView").html(loadingView.$el)
+    
     admin: ->
-        console.log('This is admin page')
+        console.log "This is the admin page"
+    
     sensors: ->
+        @loading()
         sensors = new SensorCollection()
         sensors.fetch(
             success: ->
@@ -30,6 +38,7 @@ module.exports = AppRouter = Backbone.Router.extend(
         )
 
     editSensor: (sensor_id) ->
+        @loading()
         sensor = new SensorModel()
         sensor.set({'sensor_id', sensor_id})
         sensor.fetch(
@@ -54,6 +63,7 @@ module.exports = AppRouter = Backbone.Router.extend(
         )
 
     rooms: ->
+        @loading()
         rooms = new RoomCollection()
         rooms.fetch(
             success: ->
@@ -62,6 +72,7 @@ module.exports = AppRouter = Backbone.Router.extend(
         )
 
     addRoom: ->
+        @loading()
         room = new RoomModel()
         form = new Backbone.Form({
             model: room
