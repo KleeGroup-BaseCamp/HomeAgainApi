@@ -8,6 +8,7 @@ LoadingView = require('views/loading_view')
 SensorsView = require('views/sensors_view')
 SensorView = require('views/sensor_view')
 SensorEditView= require('views/sensor_edit')
+SensorAddView= require('views/sensor_add')
 RoomsView = require('views/rooms_view')
 RoomAddView = require('views/room_add')
 
@@ -15,6 +16,7 @@ module.exports = AppRouter = Backbone.Router.extend(
     routes:
         'admin/sensors/': 'sensors'
         'admin/sensors/edit/:sensor_id': 'editSensor'
+        'admin/sensors/add/': 'addSensor'
         'admin/rooms/': 'rooms'
         'admin/rooms/add/': 'addRoom'
         'admin(/)': 'admin'
@@ -37,6 +39,30 @@ module.exports = AppRouter = Backbone.Router.extend(
                 sensorsView.render()
         )
 
+    addSensor: ->
+        @loading
+        sensor = new SensorModel()
+        delete sensor.schema.sensor_id
+        form = new Backbone.Form({
+            model:sensor
+        })
+        sensorAddView = new SensorAddView()
+        sensorAddView.model = sensor
+        sensorAddView.render()
+        $("#AppView").html(sensorAddView.$el)
+        $("#form").html(form.render().$el)
+        $("#add").click((object) ->
+            form.commmit()
+            sensor.save(
+                null,
+                success: (model, response) ->
+                    console.log('Sensor added successfully')
+                    Backbone.history.navigate('/admin/sensors/', true)
+                error: (model, response) ->
+                    console.log(response)
+            )
+        )
+
     editSensor: (sensor_id) ->
         @loading()
         sensor = new SensorModel()
@@ -45,6 +71,7 @@ module.exports = AppRouter = Backbone.Router.extend(
             success: ->
                 sensorEdit = new SensorEditView()
                 sensorEdit.model = sensor
+                sensorEdit.model.schema.model.editorAttrs = { disabled: true }
                 sensorEdit.render()
                 $("#AppView").html(sensorEdit.$el)
                 form = new Backbone.Form({

@@ -9,7 +9,8 @@ room = require './routes/room'
 
 # Init mongo connection only once
 mongo = require './mongo'
-mongo.init (error) ->
+console.log('MERDE')
+mongo.initiate (error) ->
     if error
         throw error
 
@@ -65,3 +66,5 @@ app.get '/test', routes.test('Mocha Tests')
 app.use routes.error('Page not found :(', 404)
 
 module.exports = exports = app
+
+app.listen 4000

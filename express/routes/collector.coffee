@@ -6,7 +6,7 @@ exports.collect = (req, res) ->
 
     jsonData = req.body
 
-    mongo.sensorCollection.count(
+    mongo.db.collection('sensor').count(
         {sensor_id : jsonData.sensor_id}, (err, count) ->
             if err
                 console.log(err)
@@ -14,13 +14,13 @@ exports.collect = (req, res) ->
 
             else if  count < 1
                 console.log "Adding new sensor " + jsonData.sensor_id + " to DB"
-                mongo.sensorCollection.insert(
+                mongo.db.collection('sensor').insert(
                     {sensor_id : jsonData.sensor_id, model : jsonData.model }, {w:1}, (err, collection) ->
                         console.log(err)
                 )
         )
     
-    mongo.dataCollection.insert(
+    mongo.db.collection('data').insert(
         jsonData, {w:1}, (err, collection) ->
             if err
                 console.log(err)
