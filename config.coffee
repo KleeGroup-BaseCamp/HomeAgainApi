@@ -52,33 +52,33 @@ exports.config =
                 ]
         templates:
             joinTo: 'javascripts/app.js'
-    # server:
-    #     path: 'server.coffee'
-    #     port: 4000
-    #     base: '/'
-    #     app: 'express'
-    #     debug: 'brunch:server'
-    #     persistent: true
-    #     interval: 100
-    #     watched: ['public', 'express']
-    #     ignore: /(^[.#]|(?:~)$)/
-    #     source: /.*\.coffee$/
-    #     linter:
-    #         enabled: on
-    #         coffeelint:
-    #             pattern: /.*\.coffee$/
-    #             options:
-    #                 indentation:
-    #                     value: 4
-    #                     level: "error"
-    #                 no_trailing_whitespace:
-    #                     level: "ignore" 
-    #                 max_line_length:
-    #                     value: 180
+    server:
+        path: 'server.coffee'
+        port: 4000
+        base: '/'
+        app: 'express'
+        debug: 'brunch:server'
+        persistent: true
+        interval: 100
+        watched: ['public', 'express']
+        ignore: /(^[.#]|(?:~)$)/
+        source: /.*\.coffee$/
+        linter:
+            enabled: on
+            coffeelint:
+                pattern: /.*\.coffee$/
+                options:
+                    indentation:
+                        value: 4
+                        level: "error"
+                    no_trailing_whitespace:
+                        level: "ignore" 
+                    max_line_length:
+                        value: 180
 
-    #     tester:
-    #         enabled: off
-    #         mocha:
-    #             pattern: /^.*_test\.coffee$/
-    #             options:
-    #                 reporter:'spec'
+        tester:
+            enabled: off
+            mocha:
+                pattern: /^.*_test\.coffee$/
+                options:
+                    reporter:'spec'

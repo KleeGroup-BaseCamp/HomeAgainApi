@@ -40,38 +40,20 @@ module.exports = AppRouter = Backbone.Router.extend(
         )
 
     addSensor: ->
-        @loading
-        sensor = new SensorModel()
-        delete sensor.schema.sensor_id
-        form = new Backbone.Form({
-            model:sensor
-        })
-        sensorAddView = new SensorAddView()
-        sensorAddView.model = sensor
-        sensorAddView.render()
-        $("#AppView").html(sensorAddView.$el)
-        $("#form").html(form.render().$el)
-        $("#add").click((object) ->
-            form.commmit()
-            sensor.save(
-                null,
-                success: (model, response) ->
-                    console.log('Sensor added successfully')
-                    Backbone.history.navigate('/admin/sensors/', true)
-                error: (model, response) ->
-                    console.log(response)
-            )
-        )
-
-    editSensor: (sensor_id) ->
         @loading()
-        sensor = new SensorModel()
-        sensor.set({'sensor_id', sensor_id})
-        sensor.fetch(
-            success: ->
-                sensorEdit = new SensorEditView()
-                sensorEdit.model = sensor
-                sensorEdit.model.schema.model.editorAttrs = { disabled: true }
+        sensor = new SensorModel({'sensor_id':'TEMP_4'})
+        sensorEdit = new SensorEditView()
+        sensorEdit.model = sensor
+        sensorEdit.model.schema.model.editorAttrs = { disabled: true }
+        roomOptions = [{val: 0, label:"Unassigned"}]
+        # We need to fill options for room from network call
+        $.getJSON(
+            'http://localhost:4000/room/',
+            (rooms) ->
+                rooms.forEach( (room) ->
+                    roomOptions.push({ val: room['_id'], label: room['name'] })
+                )
+                sensor.schema.room_id.options = roomOptions
                 sensorEdit.render()
                 $("#AppView").html(sensorEdit.$el)
                 form = new Backbone.Form({
@@ -86,6 +68,44 @@ module.exports = AppRouter = Backbone.Router.extend(
                             console.log('Sensor successfully updated! ')
                             Backbone.history.navigate('/admin/sensors/', true)
                     )
+                )
+
+        )
+
+
+    editSensor: (sensor_id) ->
+        @loading()
+        sensor = new SensorModel()
+        sensor.set({'sensor_id', sensor_id})
+        sensor.fetch(
+            success: ->
+                sensorEdit = new SensorEditView()
+                sensorEdit.model = sensor
+
+                roomOptions = [{val: 0, label:"Unassigned"}]
+                $.getJSON(
+                    'http://localhost:4000/room/',
+                    (rooms) ->
+                        rooms.forEach( (room) ->
+                            roomOptions.push({ val: room['_id'], label: room['name'] })
+                        )
+                        sensor.schema.room_id.options = roomOptions
+                        sensorEdit.model.schema.model.editorAttrs = { disabled: true }
+                        sensorEdit.render()
+                        $("#AppView").html(sensorEdit.$el)
+                        form = new Backbone.Form({
+                            model: sensor
+                            })
+                        $("#form").html(form.render().$el)
+                        $("#update").click( (object) ->
+                            form.commit()
+                            sensor.save(
+                                null,
+                                success: ->
+                                    console.log('Sensor successfully updated! ')
+                                    Backbone.history.navigate('/admin/sensors/', true)
+                            )
+                        )
                 )
         )
 
