@@ -6,6 +6,7 @@ module.exports.initiate = (callback) ->
         if err
             throw err
         module.exports.db = db
+        callback(db)
     )
     # global.mongoConnection = global.mongoConnection || new mongodb.Db('homeagain', server, {w:1}).open(
     #     (error, db) ->

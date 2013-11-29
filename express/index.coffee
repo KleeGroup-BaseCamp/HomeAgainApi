@@ -9,10 +9,9 @@ room = require './routes/room'
 
 # Init mongo connection only once
 mongo = require './mongo'
-console.log('MERDE')
-mongo.initiate (error) ->
-    if error
-        throw error
+mongo.initiate (db) ->
+    console.log('Connection to mongo')
+
 
 app = express()
 # Allow Cross Origin
