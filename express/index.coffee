@@ -17,7 +17,8 @@ app = express()
 # Allow Cross Origin
 app.use '/', (req, res, next) ->
     res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "X-Requested-With")
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header("Access-Control-Allow-Headers", "Content-Type")
 
     # TODO Non automatic content type
     next()
@@ -66,4 +67,4 @@ app.use routes.error('Page not found :(', 404)
 
 module.exports = exports = app
 
-#app.listen 4000
+app.listen 4000
