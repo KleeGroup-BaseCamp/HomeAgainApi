@@ -11,9 +11,10 @@ REST Api for HomeAgain applications.
 1. Install [MongoDB](http://www.mongodb.org/)
 1. Install Brunch : `npm install -g brunch`
 1. Install Bower : `npm install -g bower`
+1. Install apidoc : `npm install -g apidoc`
 1. Clone the repo : `git clone git@github.com:HomeAgain/HomeAgainApi.git`
 1. Install npm dependencies : `npm install`
-1. Launch Brunch : `brunch watch --server` or `brunch w -s``
+1. Launch Brunch : `brunch watch --server` or `brunch w -s`
 
 HomeAgain API is ready ! To check it out go to `http://localhost:4000/admin/`
 
