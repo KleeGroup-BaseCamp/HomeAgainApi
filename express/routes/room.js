@@ -2,6 +2,13 @@ mongo = require('../mongo');
 async = require('async');
 BSON = require('mongodb').BSONPure;
 
+
+/**
+* @api {get} /user/:id Request User information
+* @apiName GetUser_test
+* @apiGroup User_test
+*/
+
 exports.all = function(req, res){
     mongo.db.collection('room').find().toArray(
         function(err, rooms){

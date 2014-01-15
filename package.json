@@ -1,7 +1,8 @@
 {
-  "author": "Your Name",
-  "name": "package-name",
-  "description": "Package description",
+  "author": "Pol Maire",
+  "name": "HomeAgain API",
+  "description": "HomeAgain is an Open Source project that lets programmers use all sorts of home sensors to build valuable services for consumers. Here is its API documentation.",
+  "apidocFilename": "API.md",
   "version": "0.0.1",
   "homepage": "",
   "repository": {
