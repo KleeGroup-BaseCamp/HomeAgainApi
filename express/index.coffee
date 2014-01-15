@@ -6,6 +6,7 @@ backbone = require './routes/index'
 collector = require './routes/collector'
 sensor = require './routes/sensor'
 room = require './routes/room'
+login = require './routes/login'
 
 # Init mongo connection only once
 mongo = require './mongo'
@@ -58,6 +59,7 @@ app.get '/room/:room_id', room.get
 app.post '/room/', room.post
 app.get '/room', room.all
 
+app.post '/login', login.post
 
 app.get '/test', routes.test('Mocha Tests')
 
