@@ -29,23 +29,26 @@ loginMiddleware = (req, res, next) ->
     # add loginMiddleware as second argument for 
     # endpoints that need login
     # user_id is int, api_key is string
-    user_id = parseInt(req.query.user_id);
-    api_key = req.query.api_key.toString()
+    if !req.query.user_id or !req.query.api_key
+        res.send 401
+    else
+        user_id = parseInt(req.query.user_id);
+        api_key = req.query.api_key.toString()
 
-    mongo.db.collection('homeagain_users').findOne(
-            {   
-                user_id: user_id,
-                api_key : api_key
-            },
-            (err, user) ->
-                if err
-                    res.send 500
-                else if user
-                    console.log("User " + user_id.toString() + " successfully logged in")
-                    next()
-                else
-                    res.send 401
-        )
+        mongo.db.collection('homeagain_users').findOne(
+                {   
+                    user_id: user_id,
+                    api_key : api_key
+                },
+                (err, user) ->
+                    if err
+                        res.send 500
+                    else if user
+                        console.log("User " + user_id.toString() + " successfully logged in")
+                        next()
+                    else
+                        res.send 401
+            )
 
 app.configure 'production', ->
     app.use express.limit '5mb'
