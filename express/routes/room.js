@@ -44,9 +44,10 @@ exports.get = function(req, res){
             if(err) res.send(500);
             if(!room) res.send(404);
 
-            if !room.user_id || !(room.user_id == req.user.user_id)
+            if(!room.user_id || !(room.user_id == req.user.user_id)){
                 res.send(403)
-            else
+            }
+            else{
                 mongo.db.collection('sensor').find({room_id : room._id.toString()}).toArray(
                     function(err, sensors){
                         //console.log("Query terminated");
@@ -55,7 +56,7 @@ exports.get = function(req, res){
                         res.send(JSON.stringify(room), 200);
                     }
                 );
-            
+            }
         }
     );
 };
