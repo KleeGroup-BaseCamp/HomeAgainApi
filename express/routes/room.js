@@ -10,7 +10,7 @@ BSON = require('mongodb').BSONPure;
 */
 
 exports.all = function(req, res){
-    mongo.db.collection('room').find().toArray(
+    mongo.db.collection('room').find({'user_id': req.user.user_id}).toArray(
         function(err, rooms){
             if(err) res.send(500);
             if(!rooms) res.send(404);
@@ -44,20 +44,24 @@ exports.get = function(req, res){
             if(err) res.send(500);
             if(!room) res.send(404);
 
-            mongo.db.collection('sensor').find({room_id : room._id.toString()}).toArray(
-                function(err, sensors){
-                    //console.log("Query terminated");
-                    //console.log(sensors);
-                    room.sensors = sensors;
-                    res.send(JSON.stringify(room), 200);
-                }
-            );
+            if !room.user_id || !(room.user_id == req.user.user_id)
+                res.send(403)
+            else
+                mongo.db.collection('sensor').find({room_id : room._id.toString()}).toArray(
+                    function(err, sensors){
+                        //console.log("Query terminated");
+                        //console.log(sensors);
+                        room.sensors = sensors;
+                        res.send(JSON.stringify(room), 200);
+                    }
+                );
             
         }
     );
 };
 
 exports.post = function(req, res){
+    req.body.user_id = req.user.user_id
     mongo.db.collection('room').insert(
         req.body,
         function(err, room){

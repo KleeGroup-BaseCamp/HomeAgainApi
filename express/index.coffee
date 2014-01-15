@@ -45,6 +45,7 @@ loginMiddleware = (req, res, next) ->
                     res.send 500
                 else if user
                     console.log("User " + user_id.toString() + " successfully logged in")
+                    req.user = user
                     next()
                 else
                     res.send 401
@@ -83,7 +84,7 @@ app.put('/sensor/:sensor_id', loginMiddleware, sensor.put)
 
 app.get '/room/:room_id', loginMiddleware, room.get
 app.post '/room/', loginMiddleware, room.post
-app.get '/room', loginMiddleware, loginMiddleware, room.all
+app.get '/room', loginMiddleware, room.all
 
 app.post '/login', login.post
 
