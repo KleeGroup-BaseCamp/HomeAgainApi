@@ -21,9 +21,9 @@ exports.post = (req, res) ->
                 else if user
                     console.log("User successfully logged in")
                     res.send JSON.stringify({
-                            'user_id': user.user_id,
-                            'api_key': user.api_key
-                        }), 200
+                        'user_id': user.user_id,
+                        'api_key': user.api_key
+                    }), 200
                 else
                     res.send 401
         )
