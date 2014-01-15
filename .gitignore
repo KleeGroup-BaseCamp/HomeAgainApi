@@ -27,3 +27,4 @@ tmp/
 public/
 
 # Doc folder (has to be generated)
+doc/

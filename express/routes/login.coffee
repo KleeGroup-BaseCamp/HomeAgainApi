@@ -1,6 +1,6 @@
 mongo = require '../mongo'
 
-exports.get = (req, res) ->
+exports.post = (req, res) ->
     if req.get('content-type').indexOf('application/json') == -1
         throw new Error("Body request is not JSON.")
 
@@ -12,6 +12,8 @@ exports.get = (req, res) ->
             api_key : req.params.api_key
             },
         (err, user) ->
-                if(err) res.send(500);
-                if(!user) res.send(403);
+            if err
+                res.send 500
+            if !user
+                res.send 401
     );

@@ -1,11 +1,11 @@
 mongo = require '../mongo'
 
 ###
-/**
+**
 * @api {get} /user/:id Request User information
 * @apiName GetUser_test2
 * @apiGroup User_test2
-*/
+**
 ###
 
 exports.collect = (req, res) ->
