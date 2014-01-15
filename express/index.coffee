@@ -24,6 +24,29 @@ app.use '/', (req, res, next) ->
     # TODO Non automatic content type
     next()
 
+loginMiddleware = (req, res, next) ->
+    # Login middleware
+    # add loginMiddleware as second argument for 
+    # endpoints that need login
+    # user_id is int, api_key is string
+    user_id = parseInt(req.query.user_id);
+    api_key = req.query.api_key.toString()
+
+    mongo.db.collection('homeagain_users').findOne(
+            {   
+                user_id: user_id,
+                api_key : api_key
+            },
+            (err, user) ->
+                if err
+                    res.send 500
+                else if user
+                    console.log("User " + user_id.toString() + " successfully logged in")
+                    next()
+                else
+                    res.send 401
+        )
+
 app.configure 'production', ->
     app.use express.limit '5mb'
 
@@ -49,15 +72,15 @@ app.configure 'development', ->
 
 
 app.all(/^\/admin.*$/, backbone.index)
-app.post '/collector/collect', collector.collect
-app.get '/sensor/:sensor_id', sensor.get
-app.get '/sensor', sensor.all
-app.put('/sensor/:sensor_id', sensor.put)
+app.post '/collector/collect', loginMiddleware, collector.collect
+app.get '/sensor/:sensor_id', loginMiddleware, sensor.get
+app.get '/sensor', loginMiddleware, sensor.all
+app.put('/sensor/:sensor_id', loginMiddleware, sensor.put)
 
 
-app.get '/room/:room_id', room.get
-app.post '/room/', room.post
-app.get '/room', room.all
+app.get '/room/:room_id', loginMiddleware, room.get
+app.post '/room/', loginMiddleware, room.post
+app.get '/room', loginMiddleware, loginMiddleware, room.all
 
 app.post '/login', login.post
 
