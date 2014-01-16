@@ -1,6 +1,38 @@
 mongo = require '../mongo'
 async = require 'async'
 
+
+###**
+* @api {get} /sensors Read the list of sensors*
+* @apiName GetSensors
+* @apiGroup Sensors
+* @apiDescription This request gives the list of sensors of one user.
+* @apiSuccess {String[]} id            List of <code>id</code> of the sensors that belong to one user.
+* @apiError              NoApikey      No apikey was sent with the request.
+* @apiError              NoAccessRight Wrong apikey.
+**###
+
+###**
+* @api {get} /sensors/:id Read data of a sensor*
+* @apiName GetSensorsId
+* @apiGroup Sensors
+* @apiDescription This request gives you information about a given sensor, for the user who is logged in.
+* @apiParam {String}    id            <code>id</code> of the sensor.
+* @apiParam {Date}    [datastart]     Beginning of the period you want to get data from.
+* @apiParam {Date}    [dataend]       End of the period you want to get data from.
+* @apiSuccess {String}  id            <code>id</code> of the sensor.
+* @apiSuccess {String}  sensor        Name of the sensor.
+* @apiSuccess {String}  room          Name of the room where the sensor is.
+* @apiSuccess {String}  unit          Unit of the data given by the sensor.
+* @apiSuccess {String}  data          By default, value of the last data taken from the sensor. If a period is specified, list of all data in this period.
+* @apiSuccess {Date}    timestamp     By default, date when the last data was taken from the sensor. If a period is specified, list of all data the dated when a data was taken.
+* @apiError             IdNotFound    The <code>id</code> of the sensor was not found.
+* @apiError             NoApikey      No apikey was sent with the request.
+* @apiError             NoAccessRight Wrong apikey.
+**###
+
+
+
 exports.lastData = (req, res) ->
 #    if req.get('content-type').indexOf('application/json') == -1
 #        throw new Error("Body request is not JSON.")

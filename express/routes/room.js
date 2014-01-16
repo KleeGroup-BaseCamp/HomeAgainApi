@@ -4,9 +4,27 @@ BSON = require('mongodb').BSONPure;
 
 
 /**
-* @api {get} /user/:id Request User information
-* @apiName GetUser_test
-* @apiGroup User_test
+* @api {get} /rooms Read the list of rooms*
+* @apiName GetRooms
+* @apiGroup Rooms
+* @apiDescription This request gives the list of rooms of one user.
+* @apiSuccess {String[]} id            List of <code>id</code> of the rooms that belong to one user.
+* @apiError              NoApikey      No apikey was sent with the request.
+* @apiError              NoAccessRight Wrong apikey.
+*/
+
+/**
+* @api {get} /rooms/:id Read data of a room*
+* @apiName GetRoomsId
+* @apiGroup Rooms
+* @apiDescription This request gives you information about a given room, for the user who is logged in.
+* @apiParam {String}     id            <code>id</code> of the room.
+* @apiSuccess {String}   id            <code>id</code> of the room.
+* @apiSuccess {String}   room          Name of the room
+* @apiSuccess {String[]} sensors       List of <code>id</code> of the sensors in the room.
+* @apiError              IdNotFound    The <code>id</code> of the room was not found.
+* @apiError              NoApikey      No apikey was sent with the request.
+* @apiError              NoAccessRight Wrong apikey.
 */
 
 exports.all = function(req, res){

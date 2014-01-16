@@ -1,5 +1,6 @@
 # General information about the API
 
-## Authentification
+## Authentication
 
-When login to the platform, you will be given a apikey. If not specified in the request description, the apikey will have to be sent with the request.
+When login to the platform, you will be given a apikey.
+You will have to send the apikey with each request that ends with a star in this documentation.
