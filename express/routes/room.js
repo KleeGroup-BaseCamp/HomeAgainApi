@@ -1,4 +1,4 @@
-mongo = require('../mongo');
+mongo = require('../models/connection');
 async = require('async');
 BSON = require('mongodb').BSONPure;
 

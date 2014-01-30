@@ -1,4 +1,4 @@
-mongo = require '../mongo'
+mongo = require '../models/connection'
 
 exports.collect = (req, res) ->
     if req.get('content-type').indexOf('application/json') == -1

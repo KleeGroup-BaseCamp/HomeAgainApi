@@ -1,5 +1,4 @@
-mongo = require '../mongo'
-
+mongo = require '../models/connection'
 
 ###**
 * @api {post} /user/login Login to HomeAgain
