@@ -41,6 +41,7 @@
     "sinon": "*",
     "sinon-chai": "*",
     "supertest": "*",
-    "blanket": "*"
+    "blanket": "*",
+    "nodemon": "~1.0.14"
   }
 }
