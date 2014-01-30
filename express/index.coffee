@@ -1,6 +1,18 @@
+'use strict'
+###
+    Module dependencies.
+###
 express = require 'express'
+http = require('http')
 {join} = require 'path'
 {config} = require './config'
+
+app = express()
+server = http.createServer(app)
+app.set('port', process.env.PORT || 4000)
+###
+    Require routes.
+###
 routes = require './routes'
 backbone = require './routes/index'
 collector = require './routes/collector'
@@ -8,14 +20,8 @@ sensor = require './routes/sensor'
 room = require './routes/room'
 login = require './routes/login'
 
-# Init mongo connection only once
-mongo = require './mongo'
-mongo.initiate (db) ->
-console.log('Connection to mongo')
 
-
-app = express()
-# Allow Cross Origin
+# Allow Cross Origin middleware
 app.use '/', (req, res, next) ->
     res.header("Access-Control-Allow-Origin", "*")
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
@@ -24,6 +30,10 @@ app.use '/', (req, res, next) ->
     # TODO Non automatic content type
     next()
 
+###
+    Define all the middleware use by the application.
+    The order in which they are defined is important.
+###
 loginMiddleware = (req, res, next) ->
     # Login middleware
     # add loginMiddleware as second argument for
@@ -50,7 +60,21 @@ loginMiddleware = (req, res, next) ->
                 else
                     res.send 401
             )
+### Default 404 middleware ###
+#app.use routes.error('Page not found :(', 404)
 
+#Application name.
+app.locals.title = "Home Again API"
+
+
+# Init mongo connection only once
+require('./models/connection').initiate (db) ->
+    console.log('Connection is now established with mongoDB on homeAgain.')
+
+
+###
+    Configuration of the application.
+###
 app.configure 'production', ->
     app.use express.limit '5mb'
 
@@ -74,26 +98,26 @@ app.configure 'development', ->
     app.locals.pretty = true
 
 
-
+###
+    Actions
+###
 app.all(/^\/admin.*$/, backbone.index)
 app.post '/collector/collect', loginMiddleware, collector.collect
+###Sensor actions###
 app.get '/sensor/:sensor_id', loginMiddleware, sensor.get
 app.get '/sensor', loginMiddleware, sensor.all
 app.put('/sensor/:sensor_id', loginMiddleware, sensor.put)
 
-
+###Room actions###
 app.get '/room/:room_id', loginMiddleware, room.get
 app.post '/room/', loginMiddleware, room.post
 app.get '/room', loginMiddleware, room.all
 
 app.post '/login', login.post
-
 app.get '/test', routes.test('Mocha Tests')
 
-
-### Default 404 middleware ###
-app.use routes.error('Page not found :(', 404)
+# Server launching
+server.listen app.get('port'), ()->
+    console.log('Express server listening on port', app.get('port'))
 
 module.exports = exports = app
-
-app.listen 4000
