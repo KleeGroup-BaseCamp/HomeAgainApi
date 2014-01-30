@@ -100,6 +100,8 @@ app.configure 'development', ->
 
 ###
     Actions
+    TODO: put some controllers, which are called intp the index.coffee and register the routes.
+    These controllers should also call model when accessing to mongodbd.
 ###
 app.all(/^\/admin.*$/, backbone.index)
 app.post '/collector/collect', loginMiddleware, collector.collect
