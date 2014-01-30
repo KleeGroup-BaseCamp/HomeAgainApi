@@ -10,6 +10,8 @@ http = require('http')
 app = express()
 server = http.createServer(app)
 app.set('port', process.env.PORT || 4000)
+
+mongo = require('./models/connection')
 ###
     Require routes.
 ###
@@ -44,7 +46,7 @@ loginMiddleware = (req, res, next) ->
     else
         user_id = parseInt(req.query.user_id)
         api_key = req.query.api_key.toString()
-
+        # Mongo request should be in a model.
         mongo.db.collection('homeagain_users').findOne(
             {
                 user_id: user_id,
@@ -61,6 +63,7 @@ loginMiddleware = (req, res, next) ->
                     res.send 401
             )
 ### Default 404 middleware ###
+# Seems to be buggy on my computer.
 #app.use routes.error('Page not found :(', 404)
 
 #Application name.
@@ -68,7 +71,7 @@ app.locals.title = "Home Again API"
 
 
 # Init mongo connection only once
-require('./models/connection').initiate (db) ->
+mongo.initiate (db) ->
     console.log('Connection is now established with mongoDB on homeAgain.')
 
 
