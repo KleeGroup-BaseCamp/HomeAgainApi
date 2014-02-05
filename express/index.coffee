@@ -107,11 +107,13 @@ app.configure 'development', ->
     These controllers should also call model when accessing to mongodbd.
 ###
 app.all(/^\/admin.*$/, backbone.index)
-app.post '/collector/collect', loginMiddleware, collector.collect
+app.post '/collector/collect', collector.collect
+
 ###Sensor actions###
-app.get '/sensor/:sensor_id', loginMiddleware, sensor.get
-app.get '/sensor', loginMiddleware, sensor.all
-app.put('/sensor/:sensor_id', loginMiddleware, sensor.put)
+
+app.get '/sensors/:id', loginMiddleware, sensor.get
+app.get '/sensors/', loginMiddleware, sensor.get
+app.put('/sensors/:sensor_id', loginMiddleware, sensor.put)
 
 ###Room actions###
 app.get '/room/:room_id', loginMiddleware, room.get

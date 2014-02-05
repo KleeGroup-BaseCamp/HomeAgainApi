@@ -32,6 +32,52 @@ async = require 'async'
 **###
 
 
+exports.get = (req, res) ->
+    # If there is an ID, we send the sensor and its data
+    console.log req.query
+    if req.params.sensor_id
+        mongo.db.collection('sensors').find({sensor_id: req.params.sensor_id}).toArray((err, sensors) ->
+            # We only want one sensor, finding more indicate duplicate key in database
+            
+            if err or ( sensors and sensors.length > 1 )
+                res.send 500
+            else if sensors and sensors.length > 0 
+                sensor = sensors[0]
+                # We check that the user own the hub of this sensor
+                console.log req.user
+                if !req.user.hubs or req.user.hubs.indexOf(sensor.hub_id) == -1
+                    res.send 404
+                responseObject = sensor
+                criteria = 
+                    sensor_id : sensor.sensor_id
+                limit = 1 
+                if req.query.datastart and req.query.dataend
+                    criteria.created_on = 
+                        $gte: parseInt(req.query.datastart)
+                        $lt : parseInt(req.query.dataend)
+                    console.log criteria
+                    # TODO set dynamic limit
+                    limit = 10
+                
+                mongo.db.collection('data').find(criteria).sort({created_on : -1}).limit(limit).toArray((err, data) -> 
+                    
+                    if err or data.length == 0
+                        data = []
+                    responseObject.data = data
+                    res.send JSON.stringify(responseObject), 200
+                )
+            else # No sensors without error means that the sensor does not exist, send 404
+                res.send 404
+        )
+    else 
+        console.log req.user.hubs
+        mongo.db.collection('sensors').find({hub_id : {$in : req.user.hubs }}).toArray((err, sensors) ->
+            if err
+                res.send 500
+            else 
+                res.send sensors, 200
+        )
+
 
 exports.lastData = (req, res) ->
 #    if req.get('content-type').indexOf('application/json') == -1
@@ -82,7 +128,7 @@ exports.all = (req, res) ->
             res.send 404
     )
 
-exports.get = (req, res) ->
+###exports.get = (req, res) ->
     mongo.db.collection('sensor').findOne(
         {'sensor_id' : req.params.sensor_id},
         (err, sensor) ->
@@ -104,7 +150,7 @@ exports.get = (req, res) ->
                         )
             else 
                 res.send 404
-        )
+        )###
 
 exports.put = (req, res) ->
     #console.log(req.params.sensor_id)
