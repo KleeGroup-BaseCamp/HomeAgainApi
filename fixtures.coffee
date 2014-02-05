@@ -6,6 +6,7 @@ user = {
     username : 'test'
     password : 'test'
     api_key : 'abcdef'
+    hubs : [ "HUB_1"]
 }
 
 
@@ -389,7 +390,7 @@ data = [
   }
 ]
 
-canExit = 
+
 
 mongo.initiate (db) ->
     # First drop everythin
