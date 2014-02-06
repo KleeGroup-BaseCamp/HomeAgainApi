@@ -13,6 +13,19 @@ user = {
 #################################################
 #        SENSORS
 #################################################
+rooms = [
+    {
+        name : "Kitchen"
+        hub_id : "HUB_1"
+        _id : BSON.ObjectID("52f2d1d13c45222b74aa44a5")
+    }
+    {
+        name : "Living room"
+        hub_id : "HUB_1"
+        _id : BSON.ObjectID("52f2d43e3c45222b74aa44a6")
+    }
+]
+
 sensors = [
   {
     sensor_id: "TEMP_1"
@@ -20,6 +33,7 @@ sensors = [
     hub_id: "HUB_1"
     created_on: 1391638043046
     _id: BSON.ObjectID("52f2b61b645834b3ca000002")
+    room_id : "52f2d43e3c45222b74aa44a6"
   }
   {
     sensor_id: "TEMP_3"
@@ -27,6 +41,7 @@ sensors = [
     hub_id: "HUB_1"
     created_on: 1391638043052
     _id: BSON.ObjectID("52f2b61b645834b3ca000007")
+    room_id : "52f2d43e3c45222b74aa44a6"
   }
   {
     sensor_id: "DOOR_1"
@@ -34,6 +49,7 @@ sensors = [
     hub_id: "HUB_1"
     created_on: 1391638043058
     _id: BSON.ObjectID("52f2b61b645834b3ca000008")
+    room_id : "52f2d43e3c45222b74aa44a6"
   }
   {
     sensor_id: "TEMP_2"
@@ -41,6 +57,7 @@ sensors = [
     hub_id: "HUB_1"
     created_on: 1391638043059
     _id: BSON.ObjectID("52f2b61b645834b3ca000009")
+    room_id : "52f2d1d13c45222b74aa44a5"
   }
   {
     sensor_id: "DOOR_2"
@@ -48,6 +65,7 @@ sensors = [
     hub_id: "HUB_1"
     created_on: 1391638043061
     _id: BSON.ObjectID("52f2b61b645834b3ca00000a")
+    room_id : "52f2d43e3c45222b74aa44a6"
   }
   {
     sensor_id: "DOOR_3"
@@ -55,6 +73,7 @@ sensors = [
     hub_id: "HUB_1"
     created_on: 1391638043067
     _id: BSON.ObjectID("52f2b61b645834b3ca00000d")
+    room_id : "52f2d1d13c45222b74aa44a5"
   }
   {
     sensor_id: "MOISTURE_1"
@@ -62,6 +81,7 @@ sensors = [
     hub_id: "HUB_1"
     created_on: 1391638043068
     _id: BSON.ObjectID("52f2b61b645834b3ca00000e")
+    room_id : "52f2d1d13c45222b74aa44a5"
   }
   {
     sensor_id: "MOISTURE_2"
@@ -69,6 +89,7 @@ sensors = [
     hub_id: "HUB_1"
     created_on: 1391638043072
     _id: BSON.ObjectID("52f2b61b645834b3ca000011")
+    room_id : "52f2d1d13c45222b74aa44a5"
   }
   {
     sensor_id: "MOISTURE_3"
@@ -76,6 +97,7 @@ sensors = [
     hub_id: "HUB_1"
     created_on: 1391638043073
     _id: BSON.ObjectID("52f2b61b645834b3ca000012")
+    room_id : "52f2d1d13c45222b74aa44a5"
   }
 ]
 
@@ -394,7 +416,7 @@ data = [
 
 mongo.initiate (db) ->
     # First drop everythin
-    #db.collection('homeagain_users').drop()
+    
     async.series([
         (callback) -> (
             if db.collection('homeagain_users')
@@ -403,6 +425,18 @@ mongo.initiate (db) ->
                         console.log "Error while dropping homeagain_users : " + err
                     else
                         console.log "Homeagain_users dropped"
+                    callback(null, null)
+                )
+            else
+                callback(null, null)
+        ),
+        (callback) -> (
+            if db.collection('rooms')
+                db.collection('rooms').drop((err)->
+                    if err
+                        console.log "Error while dropping rooms : " + err
+                    else
+                        console.log "Rooms dropped"
                     callback(null, null)
                 )
             else
@@ -447,6 +481,16 @@ mongo.initiate (db) ->
                     )
                 ),
                 (callback) -> (
+                    db.collection('rooms').insert(rooms, (err)->
+                        if err
+                            console.log "Error while creating rooms : " + err
+                            process.exit(1)
+                        else
+                            console.log "Rooms created"
+                            callback(null, null)
+                    )
+                ),
+                (callback) -> (
                     db.collection('homeagain_users').insert(user, (err)->
                         if err
                             console.log "Error while creating user : " + err
@@ -477,6 +521,7 @@ mongo.initiate (db) ->
                     )
                 )
                 ],
+                # Last callback, everything went fine we exit 0.
                 () ->
                     process.exit(0)
             )

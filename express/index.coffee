@@ -20,7 +20,7 @@ routes = require './routes'
 backbone = require './routes/index'
 collector = require './routes/collector'
 sensor = require './routes/sensor'
-room = require './routes/room'
+rooms = require './routes/rooms'
 login = require './routes/login'
 signup = require './routes/signup'
 
@@ -119,9 +119,13 @@ app.get '/sensors/', loginMiddleware, sensor.get
 app.put('/sensors/:sensor_id', loginMiddleware, sensor.put)
 
 ###Room actions###
-app.get '/room/:room_id', loginMiddleware, room.get
-app.post '/room/', loginMiddleware, room.post
-app.get '/room', loginMiddleware, room.all
+app.get '/rooms/:room_id', loginMiddleware, rooms.get
+app.get '/rooms/', loginMiddleware, rooms.get
+
+# Deprecated
+#app.get '/room/:room_id', loginMiddleware, room.get
+#app.post '/room/', loginMiddleware, room.post
+#app.get '/room', loginMiddleware, room.all
 
 app.post '/login', login.post
 app.post '/signup', signup.post
