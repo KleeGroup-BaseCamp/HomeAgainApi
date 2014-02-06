@@ -17,18 +17,36 @@ async = require 'async'
 * @apiName GetSensorsId
 * @apiGroup Sensors
 * @apiDescription This request gives you information about a given sensor, for the user who is logged in.
-* @apiParam {String}    id            <code>id</code> of the sensor.
-* @apiParam {Date}    [datastart]     Beginning of the period you want to get data from.
-* @apiParam {Date}    [dataend]       End of the period you want to get data from.
-* @apiSuccess {String}  id            <code>id</code> of the sensor.
-* @apiSuccess {String}  sensor        Name of the sensor.
-* @apiSuccess {String}  room          Name of the room where the sensor is.
-* @apiSuccess {String}  unit          Unit of the data given by the sensor.
-* @apiSuccess {String}  data          By default, value of the last data taken from the sensor. If a period is specified, list of all data in this period.
-* @apiSuccess {Date}    timestamp     By default, date when the last data was taken from the sensor. If a period is specified, list of all data the dated when a data was taken.
-* @apiError             IdNotFound    The <code>id</code> of the sensor was not found.
-* @apiError             NoApikey      No apikey was sent with the request.
-* @apiError             NoAccessRight Wrong apikey.
+* @apiExample Example usage:
+*     curl -i http://homeagain.io/sensors/23?api_key=8264823&datastart=1391631304&datastop=1391631800
+* @apiParam {String}    id              <code>id</code> of the sensor.
+* @apiParam {Date}    [datastart]       Beginning of the period you want to get data from.
+* @apiParam {Date}    [dataend]         End of the period you want to get data from.
+* @apiSuccess {String}  id              <code>id</code> of the sensor.
+* @apiSuccess {String}  sensor          Name of the sensor.
+* @apiSuccess {String}  room_id         Id of the room where the sensor is.
+* @apiSuccess {String}  unit            Unit of the data given by the sensor.
+* @apiSuccess {String}  data            By default, value and timestamp of the last data taken from the sensor. If a period is specified, list of all timestamp and data in this period.
+* @apiError             IdNotFound      The <code>id</code> of the sensor was not found.
+* @apiError             NoApikey        No apikey was sent with the request.
+* @apiError             NoAccessRight   Wrong apikey.
+* @apiError             WrongDatastart  datastart is at wrong format - should be a timestamp
+* @apiError             WrongDatastop   datastop is at wrong format - should be a timestamp
+* @apiError             NoDatastart     datastop was given with no datastart
+* @apiError             NoDatastop      datastart was given with no datastop
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "id": "23",
+*       "sensor": "Kitchen's temperature"
+*       "room_id": "45"
+*       "unit": "Temperature.Celsius"
+*       "data": [{
+*           "value": "23"
+*           "timestamp": "1391631784"
+*           }, ...
+*           ]
+*     }
 **###
 
 

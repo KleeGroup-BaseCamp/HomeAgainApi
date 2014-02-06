@@ -4,14 +4,27 @@ mongo = require '../models/connection'
 * @api {post} /user/login Login to HomeAgain
 * @apiName PostUser
 * @apiGroup User
+* @apiExample Example usage:
+*   curl -i \
+*       -H "Content-Type: application/json" \
+*       -d '{"username":"user", "password":"password"}' \
+*       "http://homeagain.io/login"
 * @apiParam {String}    id            <code>id</code> of the User.
 * @apiParam {String}    password      Password of the User.
 * @apiSuccess {String}  firstname     First Name of the User.
 * @apiSuccess {String}  lastname      Last Name of the User.
 * @apiSuccess {String}  id            <code>id</code> of the User.
-* @apiSuccess {String}  apikey        APIkey that needs to be sent with each request with a star.
+* @apiSuccess {String}  api_key        APIkey that needs to be sent with each request with a star.
 * @apiError             IdNotFound    The <code>id</code> of the User was not found.
 * @apiError             WrongPassword The password is wrong.
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "firstname": "Matthieu",
+*       "lastname": "Dupont"
+*       "id": "23"
+*       "api_key": "785876"
+*     }
 **###
 
 ###**
