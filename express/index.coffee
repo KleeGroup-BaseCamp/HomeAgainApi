@@ -114,7 +114,7 @@ app.post '/collector/collect', collector.collect
 
 ###Sensor actions###
 
-app.get '/sensors/:id', loginMiddleware, sensor.get
+app.get '/sensors/:sensor_id', loginMiddleware, sensor.get
 app.get '/sensors/', loginMiddleware, sensor.get
 app.put('/sensors/:sensor_id', loginMiddleware, sensor.put)
 
