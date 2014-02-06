@@ -52,7 +52,6 @@ async = require 'async'
 
 exports.get = (req, res) ->
     # If there is an ID, we send the sensor and its data
-    console.log req.query
     if req.params.sensor_id
         mongo.db.collection('sensors').find({sensor_id: req.params.sensor_id}).toArray((err, sensors) ->
             # We only want one sensor, finding more indicate duplicate key in database
@@ -61,8 +60,7 @@ exports.get = (req, res) ->
                 res.send 500
             else if sensors and sensors.length > 0 
                 sensor = sensors[0]
-                # We check that the user own the hub of this sensor
-                console.log req.user
+                # We check that the user own the hub of this sensorr
                 if !req.user.hubs or req.user.hubs.indexOf(sensor.hub_id) == -1
                     res.send 404
                 responseObject = sensor
@@ -88,7 +86,6 @@ exports.get = (req, res) ->
                 res.send 404
         )
     else 
-        console.log req.user.hubs
         mongo.db.collection('sensors').find({hub_id : {$in : req.user.hubs }}).toArray((err, sensors) ->
             if err
                 res.send 500
