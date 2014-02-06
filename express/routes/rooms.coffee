@@ -1,6 +1,6 @@
 mongo = require '../models/connection'
 BSON = require('mongodb').BSONPure;
-
+async = require 'async'
 exports.get = (req, res) ->
     if req.params.room_id
         mongo.db.collection('rooms').find({_id: BSON.ObjectID(req.params.room_id)}).toArray((err, rooms) ->
@@ -28,5 +28,24 @@ exports.get = (req, res) ->
             if err
                 res.send 500
             else 
-                res.send rooms, 200
+                async.map(rooms,
+                    (room, callback)->
+                        if !req.user.hubs or req.user.hubs.indexOf(room.hub_id) == -1
+                            res.send 404
+                        
+                        criteria = 
+                            room_id : room._id.toString()
+                        limit = 10
+
+                        mongo.db.collection('sensors').find(criteria).sort({created_on : -1}).limit(limit).toArray((err, sensors) -> 
+                            
+                            if err or sensors.length == 0
+                                sensors = []
+                            room.sensors = sensors
+                            callback(null, room)
+                        )
+                    ,
+                    () ->
+                        res.send rooms, 200
+                    )
         )
