@@ -12,6 +12,8 @@ SensorAddView= require('views/sensor_add')
 RoomsView = require('views/rooms_view')
 RoomAddView = require('views/room_add')
 
+SignupView = require('views/signup_view')
+
 module.exports = AppRouter = Backbone.Router.extend(
     routes:
         'admin/sensors/': 'sensors'
@@ -19,6 +21,7 @@ module.exports = AppRouter = Backbone.Router.extend(
         'admin/sensors/add/': 'addSensor'
         'admin/rooms/': 'rooms'
         'admin/rooms/add/': 'addRoom'
+        'admin/user/add/': 'signUp'
         'admin(/)': 'admin'
         "*path"  : "notFound"
 
@@ -29,6 +32,12 @@ module.exports = AppRouter = Backbone.Router.extend(
     
     admin: ->
         console.log "This is the admin page"
+
+    signUp: (request) ->
+        @loading()
+        signupView = new SignupView()
+        signupView.render()
+        $("#AppView").html(signupView.$el)
     
     sensors: ->
         @loading()
