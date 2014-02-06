@@ -12,6 +12,7 @@ server = http.createServer(app)
 app.set('port', process.env.PORT || 4000)
 
 mongo = require('./models/connection')
+BSON = require('mongodb').BSONPure
 ###
     Require routes.
 ###
@@ -21,6 +22,7 @@ collector = require './routes/collector'
 sensor = require './routes/sensor'
 room = require './routes/room'
 login = require './routes/login'
+signup = require './routes/signup'
 
 
 # Allow Cross Origin middleware
@@ -44,12 +46,13 @@ loginMiddleware = (req, res, next) ->
     if !req.query.user_id or !req.query.api_key
         res.send 401
     else
-        user_id = parseInt(req.query.user_id)
+        user_id = req.query.user_id
         api_key = req.query.api_key.toString()
         # Mongo request should be in a model.
+        console.log(user_id)
         mongo.db.collection('homeagain_users').findOne(
             {
-                user_id: user_id,
+                _id: BSON.ObjectID(user_id),
                 api_key : api_key
             },
             (err, user) ->
@@ -121,6 +124,7 @@ app.post '/room/', loginMiddleware, room.post
 app.get '/room', loginMiddleware, room.all
 
 app.post '/login', login.post
+app.post '/signup', signup.post
 app.get '/test', routes.test('Mocha Tests')
 
 # Server launching
