@@ -49,7 +49,6 @@ exports.post = (req, res) ->
         throw new Error("Body request is not JSON.")
 
     jsonData = req.body
-
     if !jsonData.username or !jsonData.password
         res.send 400
     else
@@ -59,13 +58,12 @@ exports.post = (req, res) ->
                 password : jsonData.password
                 },
             (err, user) ->
-                console.log(user)
                 if err
                     res.send 500
                 else if user
                     console.log("User successfully logged in")
                     res.send JSON.stringify({
-                        'user_id': user.user_id,
+                        'user_id': user._id,
                         'api_key': user.api_key
                     }), 200
                 else
