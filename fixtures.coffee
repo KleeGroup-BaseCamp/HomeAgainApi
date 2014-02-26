@@ -47,7 +47,7 @@ models.Hub.remove({}, (err) ->
 addContentAfterEmpty = () ->
 
   hub = new models.Hub(
-      name: "HUB_1"
+      identifier: "HUB_1"
   )
 
   hub.save()
@@ -115,6 +115,51 @@ addContentAfterEmpty = () ->
   )
 
   perL.save()
+
+  presence = new models.DataModel(
+    name: "presence"
+  )
+
+  presence.save()
+
+  present = new models.DataUnit(
+    name: "present",
+    model: presence
+  )
+
+  present.save()
+
+  PRESENCE_1 = new models.Sensor(
+    identifier: "PRESENCE_1"
+    model: presence
+    hub: hub
+    created_on: 1391638043046
+    room: lroom
+  )
+
+  PRESENCE_1.save()
+
+  PRESENCE_2 = new models.Sensor(
+    identifier: "PRESENCE_2"
+    model: presence
+    hub: hub
+    created_on: 1391638043046
+    room: lroom
+  )
+
+  PRESENCE_2.save()
+
+  PRESENCE_3 = new models.Sensor(
+    identifier: "PRESENCE_3"
+    model: presence
+    hub: hub
+    created_on: 1391638043046
+    room: kitchen
+  )
+
+  PRESENCE_3.save()
+
+
 
   TEMP_1 = new models.Sensor(
       identifier: "TEMP_1"

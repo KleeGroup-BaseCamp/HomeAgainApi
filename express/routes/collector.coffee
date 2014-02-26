@@ -43,7 +43,7 @@ exports.collect = (req, res) ->
                                 data.save()
                             )
                         else
-                            console.log('hub not found')
+                            console.log('hub not found' + jsonData.hub_id)
                             res.send 500
                     )
                 else
