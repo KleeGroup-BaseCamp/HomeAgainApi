@@ -11,7 +11,8 @@ app = express()
 server = http.createServer(app)
 app.set('port', process.env.PORT || 4000)
 
-mongo = require('./models/connection')
+models = require('./models/models')
+
 BSON = require('mongodb').BSONPure
 ###
     Require routes.
@@ -74,8 +75,8 @@ app.locals.title = "Home Again API"
 
 
 # Init mongo connection only once
-mongo.initiate (db) ->
-    console.log('Connection is now established with mongoDB on homeAgain.')
+# mongo.initiate (db) ->
+#     console.log('Connection is now established with mongoDB on homeAgain.')
 
 
 ###

@@ -1,5 +1,5 @@
 {
-  "author": "Pol Maire",
+  "author": "Pol Maire, Julian Guerin, Noe Malzieu",
   "name": "HomeAgainAPI",
   "description": "HomeAgain is an Open Source project that lets programmers use all sorts of home sensors to build valuable services for consumers. Here is its API documentation.",
   "apidocFilename": "API.md",
@@ -34,7 +34,8 @@
     "growl": "*",
     "cordell": "*",
     "mongodb": "~1.3.19",
-    "hat": "~0.0.3"
+    "hat": "~0.0.3",
+    "mongoose": "*"
   },
   "devDependencies": {
     "mocha": "*",
