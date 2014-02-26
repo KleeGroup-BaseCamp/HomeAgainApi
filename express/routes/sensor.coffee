@@ -1,4 +1,4 @@
-mongo = require '../models/connection'
+models = require '../models/models'
 async = require 'async'
 
 
@@ -53,9 +53,8 @@ async = require 'async'
 exports.get = (req, res) ->
     # If there is an ID, we send the sensor and its data
     if req.params.sensor_id
-        mongo.db.collection('sensors').find({sensor_id: req.params.sensor_id}).toArray((err, sensors) ->
+        models.Sensor.find({sensor_id: req.params.sensor_id}, (err, sensors) ->
             # We only want one sensor, finding more indicate duplicate key in database
-            
             if err or ( sensors and sensors.length > 1 )
                 res.send 500
             else if sensors and sensors.length > 0 
@@ -74,19 +73,19 @@ exports.get = (req, res) ->
                     console.log criteria
                     # TODO set dynamic limit
                     limit = 10
-                
-                mongo.db.collection('data').find(criteria).sort({created_on : -1}).limit(limit).toArray((err, data) -> 
-                    
+
+                models.Data.find(criteria, {sort: {created_on:-1}, limit: limit}, (err, data) ->
                     if err or data.length == 0
                         data = []
                     responseObject.data = data
                     res.send JSON.stringify(responseObject), 200
                 )
+
             else # No sensors without error means that the sensor does not exist, send 404
                 res.send 404
         )
     else 
-        mongo.db.collection('sensors').find({hub_id : {$in : req.user.hubs }}).toArray((err, sensors) ->
+        models.Sensor.find({hub: {$in: req.user.hubs}}, (err, sensors) ->
             if err
                 res.send 500
             else 
@@ -98,23 +97,20 @@ exports.lastData = (req, res) ->
 #    if req.get('content-type').indexOf('application/json') == -1
 #        throw new Error("Body request is not JSON.")
 
-    mongo.db.collection('data').findOne(
-        {'sensor_id' : req.params.sensor_id},
-        {timestamp: 1},
-        (err, object) ->
-            if err 
-                res.send 500
-            else if object
-                if !object.user_id || !(object.user_id == req.user.user_id)
-                    res.send 403
-                else
-                    res.send(JSON.stringify(object), 200)
-            else 
-                res.send 404
-        )
+    models.Data.findOne({sensor_id: req.params.sensor_id}, (err, object) ->
+        if err 
+            res.send 500
+        else if object
+            if !object.user_id || !(object.user_id == req.user.user_id)
+                res.send 403
+            else
+                res.send(JSON.stringify(object), 200)
+        else 
+            res.send 404
+    )
     
 exports.all = (req, res) ->
-    mongo.db.collection('sensor').find({user_id: req.user.user_id}).toArray((err, sensors) ->
+    models.Sensor.find({user_id: req.user.user_id}, (err, sensors) ->
         if err 
             res.send 500
         else if sensors
@@ -125,14 +121,13 @@ exports.all = (req, res) ->
                 (sensor, callback) ->
                     # Fetching last data
                     #console.log(sensor)
-                    mongo.db.collection('data').find({'sensor_id' : sensor.sensor_id}).sort({'timestamp': -1}).toArray(
-                        (err, data) ->
-                            if err 
-                                res.send 500
-                            else
-                                sensor.data = data[0]
-                                #console.log sensor
-                                callback null, sensor
+                    models.Data.find({'sensor_id' : sensor.sensor_id}, {sort: {timestamp: -1}}, (err, data) ->
+                        if err 
+                            res.send 500
+                        else
+                            sensor.data = data[0]
+                            #console.log sensor
+                            callback null, sensor
                     )
                 (err, result) ->
                     if(err) 
@@ -170,26 +165,30 @@ exports.all = (req, res) ->
 exports.put = (req, res) ->
     #console.log(req.params.sensor_id)
     delete req.body["_id"]
-    mongo.db.collection('sensor').findOne(
+    models.Sensor.findOne(
         {'sensor_id' : req.params.sensor_id},
         (err, sensor) ->
-            if err
-                res.send 500
-            else if sensor
-                if !sensor.user_id || !(sensor.user_id == req.user.user_id)
-                    res.send 403
-                else
-                    mongo.db.collection('sensor').update(
-                        {'sensor_id' : req.params.sensor_id},
-                        req.body,
-                        {upsert: false},
-                        (err, sensor) ->
-                            if err
-                                #console.log(err)
-                                res.send 500
-                            else
-                                res.send(JSON.stringify(sensor), 200)
+           if err
+               res.send 500
+           else if sensor
+               if !sensor.user_id || !(sensor.user_id == req.user.user_id)
+                   res.send 403
+               else
+                    models.Room.findOne({name: req.body.room_name}, (err, room) ->
+                        if room
+                            sensor.room = room
+                            sensor.name = req.body.sensor_name
+                            sensor.save( (err, sensor) ->
+                                if err
+                                    #console.log(err)
+                                    res.send 500
+                                else
+                                    res.send(JSON.stringify(sensor), 200)
+                            )
+                        else
+                            console.log('Room not found!')
+                            res.send 400
                     )
-            else
-                res.send 404
+           else
+               res.send 404 
     )

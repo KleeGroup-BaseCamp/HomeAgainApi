@@ -49,9 +49,8 @@ loginMiddleware = (req, res, next) ->
     else
         user_id = req.query.user_id
         api_key = req.query.api_key.toString()
-        # Mongo request should be in a model.
-        console.log(user_id)
-        mongo.db.collection('homeagain_users').findOne(
+
+        models.HomeagainUser.findOne(
             {
                 _id: BSON.ObjectID(user_id),
                 api_key : api_key
@@ -60,12 +59,13 @@ loginMiddleware = (req, res, next) ->
                 if err
                     res.send 500
                 else if user
-                    console.log("User " + user_id.toString() + " successfully logged in")
+                    console.log("User " + user.username + " successfully logged in")
                     req.user = user
                     next()
                 else
                     res.send 401
-            )
+        )
+
 ### Default 404 middleware ###
 # Seems to be buggy on my computer.
 #app.use routes.error('Page not found :(', 404)

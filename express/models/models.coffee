@@ -15,7 +15,7 @@ db.once('open', () ->
 ObjectId = mongoose.Schema.ObjectId
 
 HubSchema = mongoose.Schema(
-    name: String
+    identifier: String
 )
 
 module.exports.Hub = mongoose.model('Hub', HubSchema)
@@ -55,8 +55,8 @@ module.exports.DataUnit = mongoose.model('DataUnit', DataUnitSchema)
 DataSchema = mongoose.Schema(
     {
         sensor:  {
-        type: mongoose.Schema.ObjectId,
-        ref: 'SensorSchema'
+            type: mongoose.Schema.ObjectId,
+            ref: 'SensorSchema'
         },
         value: Number,
         model: {

@@ -1,4 +1,4 @@
-mongo = require '../models/connection'
+models = require '../models/models'
 
 ###**
 * @api {post} /user/login Login to HomeAgain
@@ -52,11 +52,11 @@ exports.post = (req, res) ->
     if !jsonData.username or !jsonData.password
         res.send 400
     else
-        mongo.db.collection('homeagain_users').findOne(
-            {   
+        models.HomeagainUser.findOne(
+            {
                 username: jsonData.username,
-                password : jsonData.password
-                },
+                password: jsonData.password
+            },
             (err, user) ->
                 if err
                     res.send 500
