@@ -1,6 +1,6 @@
 models = require '../models/models'
 async = require 'async'
-
+ObjectId = require('mongoose').Types.ObjectId
 
 ###**
 * @api {get} /sensors Read the list of sensors*
@@ -50,42 +50,44 @@ async = require 'async'
 **###
 
 
+
 exports.get = (req, res) ->
     # If there is an ID, we send the sensor and its data
     if req.params.sensor_id
-        models.Sensor.find({sensor_id: req.params.sensor_id}, (err, sensors) ->
+        console.log req.params.sensor_id
+        models.Sensor.find({identifier: req.params.sensor_id}).populate('model').exec((err, sensors) ->
             # We only want one sensor, finding more indicate duplicate key in database
             if err or ( sensors and sensors.length > 1 )
                 res.send 500
             else if sensors and sensors.length > 0 
                 sensor = sensors[0]
                 # We check that the user own the hub of this sensorr
-                if !req.user.hubs or req.user.hubs.indexOf(sensor.hub_id) == -1
-                    res.send 404
-                responseObject = sensor
+                #if !req.user.hubs or req.user.hubs.indexOf(sensor.hub_id) == -1
+                #    res.send 404
+                
+                responseSensor = sensor.toObject()
                 criteria = 
-                    sensor_id : sensor.sensor_id
+                    sensor : new ObjectId(sensor._id.toString())
                 limit = 1 
                 if req.query.datastart and req.query.dataend
                     criteria.created_on = 
                         $gte: parseInt(req.query.datastart)
                         $lt : parseInt(req.query.dataend)
-                    console.log criteria
-                    # TODO set dynamic limit
                     limit = 10
-
-                models.Data.find(criteria, {sort: {created_on:-1}, limit: limit}, (err, data) ->
+                
+                models.Data.find(criteria, {}, {sort : {created_on : -1 },limit: limit}).populate('unit').populate('model').exec((err, data) ->
+                        
                     if err or data.length == 0
                         data = []
-                    responseObject.data = data
-                    res.send JSON.stringify(responseObject), 200
-                )
+                    
+                    responseSensor.data = data
+                    res.json 200, responseSensor)
 
             else # No sensors without error means that the sensor does not exist, send 404
                 res.send 404
         )
     else 
-        models.Sensor.find({hub: {$in: req.user.hubs}}, (err, sensors) ->
+        models.Sensor.find({hub: {$in: req.user.hubs}}).populate('model').exec((err, sensors) ->
             if err
                 res.send 500
             else 

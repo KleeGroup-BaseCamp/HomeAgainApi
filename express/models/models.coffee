@@ -42,7 +42,7 @@ DataUnitSchema = mongoose.Schema(
         name: String,
         model: {
             type: mongoose.Schema.ObjectId,
-            ref: 'DataModelSchema'
+            ref: 'DataModel'
         }
     }
     {
@@ -56,16 +56,16 @@ DataSchema = mongoose.Schema(
     {
         sensor:  {
             type: mongoose.Schema.ObjectId,
-            ref: 'SensorSchema'
+            ref: 'Sensor'
         },
         value: Number,
         model: {
             type: mongoose.Schema.ObjectId,
-            ref: 'DataModelSchema'
+            ref: 'DataModel'
         },
         unit: {
             type: mongoose.Schema.ObjectId,
-            ref: 'DataUnitSchema'
+            ref: 'DataUnit'
         },
         created_on: Date
     }
@@ -84,7 +84,7 @@ HomeagainUserSchema = mongoose.Schema(
         api_key: String,
         hubs: [
             type: mongoose.Schema.ObjectId,
-            ref: 'HubSchema'
+            ref: 'Hub'
         ]
     }
     {
@@ -98,16 +98,16 @@ SensorSchema = mongoose.Schema(
     identifier: String,
     model: {
         type: mongoose.Schema.ObjectId,
-        ref: 'DataModelSchema'
+        ref: 'DataModel'
     },
     hub: {
         type: mongoose.Schema.ObjectId,
-        ref: 'HubSchema'
+        ref: 'Hub'
     },
     created_on: Date,
     room: {
         type: mongoose.Schema.ObjectId,
-        ref: 'RoomSchema'
+        ref: 'Room'
     }
 )
 

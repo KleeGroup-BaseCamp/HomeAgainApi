@@ -1,26 +1,28 @@
 models = require '../models/models'
 BSON = require('mongodb').BSONPure;
 async = require 'async'
+ObjectId = require('mongoose').Types.ObjectId
+
 exports.get = (req, res) ->
     if req.params.room_id
         models.Room.find({_id: BSON.ObjectID(req.params.room_id)}, (err, rooms) ->
             if err or ( rooms and rooms.length > 1 )
                 res.send 500
             else if rooms and rooms.length > 0
-                room = rooms[0]
-                if !req.user.hubs or req.user.hubs.indexOf(room.hub) == -1
+                roomObject = rooms[0].toObject()
+                if !req.user.hubs or req.user.hubs.indexOf(roomObject.hub) == -1
                     res.send 404
                 
                 criteria = 
-                    room : room
+                    room : roomObject._id
                 limit = 10
 
                 models.Sensor.find(criteria).sort('-created_on').limit(limit).exec(
                     (err, sensors) ->
                         if err or sensors.length == 0
                             sensors = []
-                        room.sensors = sensors
-                        res.send JSON.stringify(room), 200
+                        roomObject.sensors = sensors
+                        res.json 200, roomObject
                 )
         )
     else
@@ -28,25 +30,28 @@ exports.get = (req, res) ->
             if err
                 res.send 500
             else 
+                async.map(rooms, (e, callback) -> e.toObject() )
                 async.map(rooms,
                     (room, callback)->
-                        # if !req.user.hubs or req.user.hubs.indexOf(room.hub_id) == -1
-                        #     res.send 404
+                        console.log room
+                        roomObject = room.toObject()
                         
                         criteria = 
-                            room : room
+                            room : new ObjectId(roomObject._id.toString())
                         limit = 10
-
-                        models.Sensor.find(criteria).sort('-created_on').limit(limit).exec(
+                        
+                        models.Sensor.find(criteria).sort('-created_on').limit(limit).populate('model').exec(
                             (err, sensors) ->
                                 if err or sensors.length == 0
                                     sensors = []
-
-                                room.sensors = sensors
-                                callback(null, room)
+                                async.map(sensors, (e, callback) -> e.toObject() )
+                                roomObject.sensors = sensors
+                                console.log roomObject
+                                callback(null, roomObject)
                         )
                     ,
-                    () ->
-                        res.send rooms, 200
+                    (err, result) ->
+                        console.log result
+                        res.json 200, result
                     )
         )
