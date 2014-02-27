@@ -522,14 +522,14 @@ addContentAfterEmpty = () ->
   ]
 
 
-  data.forEach(
-      (dat) ->
-          dataObject = new models.Data(
-              sensor: dat.sensor,
-              value: dat.value,
-              model: dat.model,
-              unit: dat.unit,
-              created_on: dat.created_on
-          )
-          dataObject.save()
-  )
+  # data.forEach(
+  #     (dat) ->
+  #         dataObject = new models.Data(
+  #             sensor: dat.sensor,
+  #             value: dat.value,
+  #             model: dat.model,
+  #             unit: dat.unit,
+  #             created_on: dat.created_on
+  #         )
+  #         dataObject.save()
+  # )

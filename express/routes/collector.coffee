@@ -8,6 +8,7 @@ exports.collect = (req, res) ->
 
 
     models.DataModel.findOne({name: jsonData.modelName}, (err, model) ->
+        console.log('DATA WITH MODEL ' + jsonData.modelName)
         if model
             console.log('model found')
             models.DataUnit.findOne({name: jsonData.unitName, model: model}, (err, unit) ->
@@ -41,7 +42,9 @@ exports.collect = (req, res) ->
                                     unit: unit
                                     created_on: jsonData.created_on
                                 )
-                                data.save()
+                                data.save((err, data) ->
+                                    res.send 200
+                                )
                             )
                         else
                             console.log('hub not found' + jsonData.hub_id)

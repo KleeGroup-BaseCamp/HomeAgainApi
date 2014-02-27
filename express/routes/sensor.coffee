@@ -75,7 +75,7 @@ exports.get = (req, res) ->
                         $lt : parseInt(req.query.dataend)
                     limit = 10
                 
-                models.Data.find(criteria, {}, {sort : {created_on : -1 },limit: limit}).populate('unit').populate('model').exec((err, data) ->
+                models.Data.find(criteria).sort('-_id').limit(limit).populate('unit').populate('model').exec((err, data) ->
                         
                     if err or data.length == 0
                         data = []
