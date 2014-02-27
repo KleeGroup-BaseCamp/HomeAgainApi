@@ -96,6 +96,7 @@ module.exports.HomeagainUser = mongoose.model('HomeagainUser', HomeagainUserSche
 
 SensorSchema = mongoose.Schema(
     identifier: String,
+    name: String,
     model: {
         type: mongoose.Schema.ObjectId,
         ref: 'DataModel'

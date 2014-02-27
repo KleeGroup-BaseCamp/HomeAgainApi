@@ -117,6 +117,8 @@ app.post '/collector/collect', collector.collect
 
 app.get '/sensors/:sensor_id', loginMiddleware, sensor.get
 app.get '/sensors/', loginMiddleware, sensor.get
+
+app.post('/sensors/:sensor_id', loginMiddleware, sensor.put)
 app.put('/sensors/:sensor_id', loginMiddleware, sensor.put)
 
 ###Room actions###
@@ -125,7 +127,7 @@ app.get '/rooms/', loginMiddleware, rooms.get
 
 # Deprecated
 #app.get '/room/:room_id', loginMiddleware, room.get
-#app.post '/room/', loginMiddleware, room.post
+app.post '/rooms/', loginMiddleware, rooms.post
 #app.get '/room', loginMiddleware, room.all
 
 app.post '/login', login.post
