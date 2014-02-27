@@ -3,6 +3,20 @@ BSON = require('mongodb').BSONPure;
 async = require 'async'
 ObjectId = require('mongoose').Types.ObjectId
 
+exports.post = (req, res) ->
+    roomData = req.body
+    console.log req.user.hubs
+    roomData.hub = req.user.hubs[0]
+    console.log roomData
+    room = new models.Room(roomData)
+    
+    room.save((err, data) ->
+            if(err)
+                res.json 500, err
+            else
+                res.json 200, data
+        )
+
 exports.get = (req, res) ->
     if req.params.room_id
         models.Room.find({_id: BSON.ObjectID(req.params.room_id)}, (err, rooms) ->
