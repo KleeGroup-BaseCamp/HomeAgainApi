@@ -55,7 +55,7 @@ exports.get = (req, res) ->
     # If there is an ID, we send the sensor and its data
     if req.params.sensor_id
         console.log req.params.sensor_id
-        models.Sensor.find({identifier: req.params.sensor_id}).populate('model').exec((err, sensors) ->
+        models.Sensor.find({identifier: req.params.sensor_id}).populate('model').sort('-created_on').exec((err, sensors) ->
             # We only want one sensor, finding more indicate duplicate key in database
             if err or ( sensors and sensors.length > 1 )
                 res.send 500

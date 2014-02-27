@@ -30,7 +30,7 @@ exports.get = (req, res) ->
             if err
                 res.send 500
             else 
-                async.map(rooms, (e, callback) -> e.toObject() )
+                #async.map(rooms, (e, callback) -> callback(null, e.toObject(), (e, result, ) ))
                 async.map(rooms,
                     (room, callback)->
                         console.log room
@@ -42,13 +42,14 @@ exports.get = (req, res) ->
                         
                         models.Sensor.find(criteria).sort('-created_on').limit(limit).populate('model').exec(
                             (err, sensors) ->
+                                console.log sensors
                                 if err or sensors.length == 0
                                     sensors = []
-                                async.map(sensors, (e, callback) -> e.toObject() )
+                                
                                 roomObject.sensors = sensors
                                 console.log roomObject
                                 callback(null, roomObject)
-                        )
+                            )
                     ,
                     (err, result) ->
                         console.log result

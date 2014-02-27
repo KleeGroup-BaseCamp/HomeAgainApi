@@ -16,6 +16,7 @@ exports.collect = (req, res) ->
                     models.Hub.findOne({identifier: jsonData.hub_id}, (err, hub) ->
                         if hub
                             console.log('hub found')
+                            console.log('looking for sensor with id ' + jsonData.sensor_id)
                             models.Sensor.findOne({identifier: jsonData.sensor_id}, (err, sensor) ->
                                 if err
                                     console.log(err)
@@ -27,7 +28,7 @@ exports.collect = (req, res) ->
                                     console.log('creating sensor')
                                     # We need to create it
                                     sensor = new models.Sensor(
-                                        identifier: jsonData.identifier,
+                                        identifier: jsonData.sensor_id,
                                         model: model,
                                         hub: hub,
                                         created_on: Date.now()
