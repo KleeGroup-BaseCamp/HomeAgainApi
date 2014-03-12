@@ -61,8 +61,8 @@ describe('API Integration tests:', () ->
     it('should be listening at localhost:4000', (done) ->
         headers = defaultQueryOptions('/', 'GET')
         http.get(headers, (res) ->
-          res.statusCode.should.eql(404)
-          done()
+            res.statusCode.should.eql(404)
+            done()
         )
     )
 
