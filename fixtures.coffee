@@ -1,8 +1,6 @@
 models = require('./express/models/models')
 
 launchFixtures = (callback) ->
-    console.log('launchFixtures called')
-
     # First we delete everything
 
     models.Hub.remove({}, (err) ->
@@ -624,7 +622,6 @@ launchFixtures = (callback) ->
 if (require.main == module)
     # Fixtures called "by hand" from command line
     launchFixtures( ->
-        console.log("Everything went well!")
         process.exit()
     )
 

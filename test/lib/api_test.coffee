@@ -19,9 +19,9 @@ defaultQueryOptions = (path, method) ->
     }
     return options
 
-describe('test the order of Mocha hooks', () ->
+describe('API Integration tests:', () ->
     before( (done) ->
-        console.log('Setting up server')
+        console.log('\nSetting up server')
         # Connecting mongoose to our mongo database
 
         mongoose.connect('mongodb://127.0.0.1:27017/homeagain_test', (error) ->
