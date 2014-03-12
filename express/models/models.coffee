@@ -1,13 +1,14 @@
 mongoose = require 'mongoose'
 
-# Connecting mongoose to our mongo database
+if mongoose.connection.readyState == 0
+    # We're not connected: using default database
+    mongoose.connect 'mongodb://127.0.0.1:27017/homeagain'
 
-mongoose.connect 'mongodb://127.0.0.1:27017/homeagain'
 db = mongoose.connection
 
 db.on('error', console.error.bind(console, 'connection error:'))
-db.once('open', () -> 
-    console.log('Connection to Homeagain mongo successful')
+db.once('open', () ->
+    console.log('Connection to Homeagain mongo successful: database "' + db.name + '"')
 )
 
 # Creating models: first a schema, then compile model

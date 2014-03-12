@@ -11,6 +11,14 @@ app = express()
 server = http.createServer(app)
 app.set('port', process.env.PORT || 4000)
 
+mongoose = require 'mongoose'
+
+# Connecting mongoose to our mongo database
+#
+if mongoose.connection.readyState == 0
+    # We're not connected: using default database
+    mongoose.connect 'mongodb://127.0.0.1:27017/homeagain'
+
 models = require('./models/models')
 
 BSON = require('mongodb').BSONPure

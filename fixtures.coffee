@@ -34,6 +34,7 @@ models.Hub.remove({}, (err) ->
                                                             if err
                                                                 console.log('Error while emptying sensors')
                                                             else
+                                                                console.log('Database emptied: filling it with sample data')
                                                                 addContentAfterEmpty()
                                                         )
                                                 )
@@ -176,7 +177,7 @@ addContentAfterEmpty = () ->
       model: temperature
       hub: hub
       created_on: 1391638043052
-      room: kitchen  
+      room: kitchen
   )
 
   TEMP_3.save()
@@ -520,6 +521,7 @@ addContentAfterEmpty = () ->
       created_on: 1391638053033
     }
   ]
+
 
 
   # data.forEach(
