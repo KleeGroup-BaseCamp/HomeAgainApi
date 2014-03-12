@@ -114,6 +114,8 @@ describe('API Integration tests:', () ->
                 body.should.have.length(12)
                 first_sensor = body[0]
                 first_sensor.should.have.property('identifier')
+
+                # In fixtures, first sensor is moisture_3
                 first_sensor.identifier.should.be.eql('MOISTURE_3')
 
                 first_sensor.should.have.property('model')
