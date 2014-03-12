@@ -1,4 +1,4 @@
 test:
-	mocha --compilers coffee:coffee-script/register test/integration/api_test.coffee
+	find ./test -name "*.coffee" | xargs mocha --compilers coffee:coffee-script/register
 
 .PHONY : test
