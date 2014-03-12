@@ -7,6 +7,25 @@ port = 4000
 user_id = null
 api_key = null
 
+addQSParm = (url, name, value) ->
+    re = new RegExp("([?&]" + name + "=)[^&]+", "")
+
+    add = (sep) ->
+        url += sep + name + "=" + encodeURIComponent(value)
+
+    change = () ->
+        url = url.replace(re, "$1" + encodeURIComponent(value))
+
+    if (url.indexOf("?") == -1)
+        add("?")
+    else
+        if (re.test(url))
+            change()
+        else
+            add("&")
+
+    return url
+
 defaultQueryOptions = (path, method) ->
     options = {
         "host": "localhost",
@@ -17,6 +36,10 @@ defaultQueryOptions = (path, method) ->
             "Content-type": "application/json"
         }
     }
+    if user_id and api_key
+        options.path = addQSParm(options.path, "user_id", user_id)
+        options.path = addQSParm(options.path, "api_key", api_key)
+
     return options
 
 describe('API Integration tests:', () ->
@@ -43,12 +66,20 @@ describe('API Integration tests:', () ->
         )
     )
 
+    it('should fail for an unlogged user', (done) ->
+        options = defaultQueryOptions('/sensors/', 'GET')
+        http.get(options, (res) ->
+            res.statusCode.should.eql(401)
+            done()
+        )
+    )
+
     it('should authenticate a user', (done) ->
         qstring = JSON.stringify({
             "username": "test",
             "password": "test"
         })
-        options = defaultQueryOptions('/login', 'POST')
+        options = defaultQueryOptions('/login/', 'POST')
         req = http.request(options)
         req.on('response', (res) ->
             res.on('data', (data) ->
@@ -69,6 +100,30 @@ describe('API Integration tests:', () ->
         )
         req.write(qstring)
         req.end()
+    )
+
+    it('should give list of sensors for a logged user', (done) ->
+        options = defaultQueryOptions('/sensors/', 'GET')
+        http.get(options, (res) ->
+            res.statusCode.should.eql(200)
+            res.on('data', (data) ->
+                body = data.toString('utf8')
+                body = JSON.parse(body)
+
+                # Fixtures currently have size 12
+                body.should.have.length(12)
+                first_sensor = body[0]
+                first_sensor.should.have.property('identifier')
+                first_sensor.identifier.should.be.eql('MOISTURE_3')
+
+                first_sensor.should.have.property('model')
+                first_sensor.should.have.property('hub')
+                first_sensor.should.have.property('room')
+
+
+            )
+            done()
+        )
     )
 
 )
