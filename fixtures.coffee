@@ -30,9 +30,9 @@ models.Hub.remove({}, (err) ->
                                                     if err
                                                         console.log('Error while emptying sensors')
                                                     else
-                                                        models.Sensor.remove({}, (err) ->
+                                                        models.DataUnit.remove({}, (err) ->
                                                             if err
-                                                                console.log('Error while emptying sensors')
+                                                                console.log('Error while emptying data_units')
                                                             else
                                                                 console.log('Database emptied: filling it with sample data')
                                                                 addContentAfterEmpty()
