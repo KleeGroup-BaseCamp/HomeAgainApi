@@ -66,11 +66,6 @@ describe('test the order of Mocha hooks', () ->
 
                 done()
             )
-            # body = JSON.parse(d.toString('utf8'))
-            # console.log(body)
-            # # body.should.have.property('message').and.match(/logged in/)
-            # # accountId = body.account.id
-            # done()
         )
         req.write(qstring)
         req.end()
