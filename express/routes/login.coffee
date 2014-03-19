@@ -1,48 +1,27 @@
 models = require '../models/models'
 
-###**
-* @api {post} /user/login Login to HomeAgain
-* @apiName PostUser
-* @apiGroup User
-* @apiExample Example usage:
-*   curl -i \
-*       -H "Content-Type: application/json" \
-*       -d '{"username":"user", "password":"password"}' \
-*       "http://homeagain.io/login"
-* @apiParam {String}    id            <code>id</code> of the User.
-* @apiParam {String}    password      Password of the User.
-* @apiSuccess {String}  firstname     First Name of the User.
-* @apiSuccess {String}  lastname      Last Name of the User.
-* @apiSuccess {String}  id            <code>id</code> of the User.
-* @apiSuccess {String}  api_key        APIkey that needs to be sent with each request with a star.
-* @apiError             IdNotFound    The <code>id</code> of the User was not found.
-* @apiError             WrongPassword The password is wrong.
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "firstname": "Matthieu",
-*       "lastname": "Dupont"
-*       "id": "23"
-*       "api_key": "785876"
-*     }
-**###
-
-###**
-* @api {get} /user/:id Read data of a user*
-* @apiName GetUser
-* @apiGroup User
-* @apiParam {String}    id            <code>id</code> of the User.
-* @apiSuccess {String}  firstname     First Name of the User.
-* @apiSuccess {String}  lastname      Last Name of the User.
-* @apiSuccess {String}  id            <code>id</code> of the User.
-* @apiErrorTitle (404)  404 Not Found
-* @apiError (404)       IdNotFound    The <code>id</code> of the User was not found.
-* @apiErrorTitle (401)  401 Unauthorized
-* @apiError (401)       NoApikey      No apikey was sent with the request.
-* @apiError (401)       NoAccessRight Wrong apikey.
-
-**###
-
+###
+@api {post} /login/ Login to HomeAgain
+@apiName PostUser
+@apiGroup User
+@apiExample Example usage:
+  curl -i \
+      -H "Content-Type: application/json" \
+      -d '{"username":"user", "password":"password"}' \
+      "http://homeagain.io/login"
+@apiParam {String}    username            <code>username</code> of the User.
+@apiParam {String}    password      Password of the User.
+@apiSuccess {String}  user_id            <code>user_id</code> of the User (ObjectId)
+@apiSuccess {String}  api_key        APIkey that needs to be sent along with each request with a star.
+@apiError             IdNotFound    The <code>id</code> of the User was not found.
+@apiError             WrongPassword The password is wrong.
+@apiSuccessExample Success-Response:
+    HTTP/1.1 200 OK
+    {
+      "id": "23"
+      "api_key": "785876"
+    }
+###
 
 exports.post = (req, res) ->
     if req.get('content-type').indexOf('application/json') == -1
